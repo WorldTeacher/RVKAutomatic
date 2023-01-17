@@ -1,6 +1,6 @@
 **Ordner-Struktur**
 
-- data: (aktuell nur lokal, da keine Daten
+- data: 
     - logs: Enthält die Log-Dateien
     - positions: enthält die Kooridnaten der Positionen, kann aber auch als Variable gespeichert werden
     - source: enthält die Quelldateien, die abgearbeitet werden
