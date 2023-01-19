@@ -4,3 +4,4 @@ imgdetect.py
 img/item/test.png
 main/
 *testdata.*
+*.log
