@@ -12,7 +12,7 @@ import imagerecognition
 
 START_POSITION = (1,1)
 EXEMPLAR_POSITION = (498,980)
-
+GESAMTINFO_POSITION = (460,91)
 FAILSAFE_LOCATION = (0,0)
 
 PPN = 234490160
@@ -56,7 +56,8 @@ class TestBot:
     def __init__(self):
         self.logging = log()
         self.keyboard = Controller()
-        self.logging.bot_info("TestBot started")        
+        self.logging.bot_info("TestBot started")   
+        self.first_run = True     
         #self.config = config
         # self.loop = asyncio.get_event_loop()
         # self.loop.run_until_complete(self.main())
@@ -71,6 +72,7 @@ class TestBot:
         for entry in data:
             print(entry[0]['PPN:'])
             time.sleep(2)
+
     def screenshot(self,region:tuple=None):
         """
         Take a screenshot of the screen and return it.
@@ -83,6 +85,7 @@ class TestBot:
         """
         screenshot = pyautogui.screenshot(region=region)
         return screenshot
+
     def move_to_image(self,image:str, screenshot):
         """
         moves the mouse cursor to the position of the image
@@ -142,15 +145,17 @@ class TestBot:
             self.logging.bot_critical(f'could not scroll, direction {direction} is not valid')
             self.error()
     
-    def write_number(self, number: int, confirm: bool = True):
+    def write_number(self, number: int, confirm: bool = True): #! deprecated
         pyautogui.write(str(PPN)) #! change to number later
         if confirm:
             pyautogui.press('enter')
+ 
     def write_string(self, string: str, confirm: bool = True):
         pyautogui.write(str(string))
         if confirm:
             pyautogui.press('enter')
-    def check(self, image, n_tries=10, delay=1):
+ 
+    def check(self, image, n_tries:int=10, delay:float=1):
         """
         checks if the screen contains the image, retries n times with delay in seconds
         
@@ -174,12 +179,11 @@ class TestBot:
                 tries += 1
                 self.logging.bot_info(f"could not find {image}, retrying ({tries}/{n_tries})")
                 time.sleep(delay)
-        
-    def check_screen(self, screenshot, image)->bool:
+        return False
+
+    def check_screen(self, image)->bool:
         """
         check if screen matches, if not abort
-        
-        
         
         Args:
             - screenshot (any): PyAutoGUI screenshot
@@ -189,7 +193,7 @@ class TestBot:
             - bool: True if screen matches, False if not
         """
         #check if screen matches
-        if pyautogui.locate(image, screenshot) is not None:
+        if pyautogui.locate(image, self.screenshot()) is not None:
             self.logging.bot_info("screen matches")
             return True
         else:         
@@ -210,57 +214,100 @@ class TestBot:
         self.check("img/main_menu/main_menu_btns.png",n_tries=10,delay=0.3)
         self.mti_rel_movement(screenshot=self.screenshot(),image="img/main_menu/numbers.png",rel_coords=(400,0))
         pyautogui.leftClick()
-        self.write_number(PPN, confirm=False) #! change to ppn_number later
-        pyautogui.press('ä')
-        #await self.loading_check()
+        self.write_string(str(ppn_number), confirm=True) #! change to ppn_number later
         self.check(image="img/item/count.png",n_tries=10,delay=0.3)
+        
+        #await self.loading_check()
         # self.check(screenshot=self.screenshot(),image="img/item/count.png")
         # self.mti_rel_movement(image="img/item/count.png",screenshot=self.screenshot(),rel_coords=(0,100))
     
-    def item_screen(self):
-        self.check("img/item/gesamtinfoheading.png",n_tries=10,delay=0.3)
-        if not self.check_screen(image="img/item/gesamtinfoheading.png",screenshot=self.screenshot()):
+    def item_screen(self,signatur):
+        if self.check("img/item/gesamtinfoheading.png",n_tries=10,delay=0.3) == False:
             self.error()
-            
-        # screenshot = pyautogui.screenshot()
-        self.edit_gesamtinfo()
-        
+        if not self.check_screen(image="img/item/gesamtinfoheading.png"):
+            self.error()
+        self.edit_gesamtinfo(signatur)
+        if self.check("img/item/gesamtinfoheading.png",n_tries=10,delay=0.25) == False:
+            self.error()
         self.mti_rel_movement(image="img/item/gesamtinfoheading.png",screenshot=self.screenshot(),rel_coords=(0,100))
         self.scroll(direction="down",n=1000)
         # self.move_to_image(image="img/exemplar_exemplare.png",screenshot=self.screenshot())
         pyautogui.moveTo(*EXEMPLAR_POSITION)
         pyautogui.leftClick()
-        # pyautogui.hold("leftAlt")
-        # pyautogui.KEYBOARD_KEYS
-        # self.keyboard.press("ä")
-    def enter_edit_mode(self):
-        self.move_to_image("img/item/edit.png",self.screenshot())
+        self.enter_edit_mode(gesamtinfo=True)
+        
+    
+    def exemplar_screen(self,signatur):
+        self.logging.bot_info("exemplar screen")
+        self.enter_edit_mode()
+        pyautogui.moveTo(1093,369)
+        if not self.check(image="img/title/exemplar_stuff.png",n_tries=10,delay=0.2):
+            self.error()
         pyautogui.leftClick()
+        pyautogui.write(signatur)
+        pyautogui.hotkey("altleft","p")
+        self.logging.bot_info("pressed alt+p")
+        if not self.check(image="img/title/title.png",n_tries=10,delay=0.2):
+            self.error()
+        pyautogui.moveTo(815,96)
+        pyautogui.leftClick()
+        # pyautogui.hotkey("altleft","r")
+        # self.logging.bot_info("pressed alt+r")
+        # time.sleep(0.2)
+        # self.logging.bot_info("waiting for alt+r to finish")
+        if not self.check("img/exemplar_anzahlEx1.png",n_tries=10,delay=0.1):
+            self.error()
+        self.logging.bot_info("alt+r finished")
+        self.commit()
+    
+    def commit(self):
+        pyautogui.keyDown("altleft")
+        pyautogui.press("b")
+        pyautogui.press("i")
+        pyautogui.keyUp("altleft")
+    def enter_edit_mode(self,gesamtinfo=False):
+        self.move_to_image("img/item/edit.png",self.screenshot())
+        if gesamtinfo:
+            pyautogui.moveTo(*GESAMTINFO_POSITION)
+        pyautogui.leftClick()
+    
     def delete_line(self, coords=(0,0)):
         if coords!=(0,0):
             pyautogui.moveTo(*coords)
         pyautogui.leftClick()
         pyautogui.hotkey("ctrl","d")
+    
     def remove_notation(self):
         line1=(160,655,100,30)
         line2=(160,685,100,30)
         def check_if_deletion_allowed(image_text):
             if not image_text in imagerecognition.FIELDS_TO_DELETE:
-                send_notification(f"not deleting {image_text}","desktop","info")
+                send_notification(f"not deleting ```*{image_text}*```","desktop","info")
                 return False 
             else:
-                send_notification(f"deleting {image_text}","desktop","info")
+                send_notification(f"deleting ```*{image_text}*```","desktop","info")
                 return True
         # time.sleep(.2)
         self.screenshot(region=line1).save("img/item/decipher.png")
         self.screenshot(region=line2).save("img/item/decipher1.png")
+        
         text_line_1 = imagerecognition.ocrtxt("img/item/decipher.png").split(" ")[0]
         text_line_2 = imagerecognition.ocrtxt("img/item/decipher1.png").split(" ")[0]
-        if check_if_deletion_allowed(text_line_2):
+        
+        if check_if_deletion_allowed(text_line_2) and check_if_deletion_allowed(text_line_1):
             self.delete_line(line2[:2])
-        if check_if_deletion_allowed(text_line_1):
             self.delete_line(line1[:2])
-    def edit_gesamtinfo(self):
+            send_notification("deleted both lines","desktop","info")
+        elif check_if_deletion_allowed(text_line_1):
+            self.delete_line(line1[:2])
+        elif check_if_deletion_allowed(text_line_2):
+            self.delete_line(line2[:2])
+        elif (text_line_1 and text_line_2) not in imagerecognition.FIELDS_TO_DELETE:
+            return False
+        return True
+
+    def edit_gesamtinfo(self,signatur):
+        
         self.enter_edit_mode()
         self.check("img/item/sachersch.png",n_tries=10,delay=0.3)
         self.move_to_image("img/item/sachersch.png",self.screenshot())
@@ -269,23 +316,33 @@ class TestBot:
         self.move_to_image("img/item/notation.png",self.screenshot())
         pyautogui.leftClick()
         send_notification("Moved to Notation", "PC1","info")
-        self.remove_notation()
+        for i in range(5):
+            if self.remove_notation() == False:
+                break
         pyautogui.moveTo(1160,665)                 
         send_notification("Moved to RVK", "PC1","info")
         pyautogui.leftClick()
         pyautogui.hotkey("ctrl","a")
         time.sleep(0.02)
-        pyautogui.write(RVK_SIGNATUR)
+        pyautogui.write(signatur) 
         send_notification("Wrote RVK", "PC1","info")
         pyautogui.hotkey("altleft","p")
-        send_notification("done", "PC1","info")
-        # self.remove_notation()
-        
-    def run(self):
+        self.check("img/main_menu/main_menu_btns.png",n_tries=10,delay=0.2)
+        # pyautogui.moveTo(1093,369)
+   
+    def run(self,):
         self.logging.bot_info("Run started")
-        self.startup()
-        self.main_screen()
-        self.item_screen()
+        
+        if self.first_run:
+            self.startup()
+            self.first_run = False
+        self.main_screen(ppn_number=PPN) #! replace constant with variable later on
+        self.item_screen(signatur=RVK_SIGNATUR)
+        if not self.check("img/title/title.png",n_tries=10,delay=0.2):
+            self.logging.bot_info("not on title screen")
+            self.error()
+        self.exemplar_screen(signatur=RVK_SIGNATUR)
+
     def startup(self): #* done
         window_name = "PHFR: "
         #detect window name
@@ -296,17 +353,21 @@ class TestBot:
         elif window_name in pyautogui.getActiveWindow().title:
             print(pyautogui.getActiveWindow().title)
             self.logging.bot_info("window found, checking if screen matches")
-            if not self.check_screen(self.screenshot(), "img/main_menu/main_menu_btns.png"):
+            if not self.check_screen("img/main_menu/main_menu_btns.png"):
                 self.error()    
         pyautogui.moveTo(*START_POSITION)
+
     def error(self): #* done
         import traceback
         trace=traceback.format_exc()
         self.logging.bot_critical("Error occured, aborting")
         send_notification(f"Error, {trace}", "PC1","error")
         raise Exception("Error occured, aborting")   
+
 if __name__ == '__main__':
     # b = Bot(json.load(open('./data/positions/config.json')))
     tb= TestBot()
-    tb.item_screen()
-    # mti_rel_movement(image="img/item/count.png",screenshot=tb.screenshot(),rel_coords=(0,100))
+    time.sleep(3)
+    tb.commit()
+    # mti_rel_movement(image="img/item/count.png",screenshot=tb.screenshot(),rel_coords=(0,100))234490160
+    
