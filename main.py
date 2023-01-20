@@ -263,7 +263,7 @@ class TestBot:
     def commit(self):
         pyautogui.keyDown("altleft")
         pyautogui.press("b")
-        pyautogui.press("i")
+        pyautogui.press("l")
         pyautogui.keyUp("altleft")
     def enter_edit_mode(self,gesamtinfo=False):
         self.move_to_image("img/item/edit.png",self.screenshot())
