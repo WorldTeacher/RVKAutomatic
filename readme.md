@@ -11,3 +11,13 @@
     
     *Viele der Bilder können wiederverwendet werden, da sie in allen Menüs vorhanden sind*, Layout ist nur als Vorlage, was benötigt wird.
     Die Bilder werden verwendet, um ua zu überprüfen ob das Program richtig läuft.
+
+
+SETUP:
+1. install requirements
+pip install -r requirements.txt
+
+Download Tesseract
+https://github.com/tesseract-ocr/tesseract
+
+change Tesseract Path in imageprocessing.py
