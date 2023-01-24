@@ -1,0 +1,16 @@
+discord==2.1.0
+discord.py==2.1.0
+Jinja2==3.1.2
+json5==0.9.10
+Levenshtein==0.20.9
+natsort==8.2.0
+pandas==1.5.2
+pdfkit==1.0.0
+polars==0.15.15
+PyAutoGUI==0.9.53
+pynput==1.7.6
+reportlab==3.6.12
+pytesseract==0.3.10
+python-Levenshtein==0.20.9
+requests==2.25.1
+regex==2022.10.31
