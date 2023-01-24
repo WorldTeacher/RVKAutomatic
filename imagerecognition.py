@@ -1,3 +1,4 @@
+import regex as re
 import pytesseract,cv2
 
 
@@ -34,7 +35,8 @@ FIELDS_TO_DELETE=[
     "Tech",
     "Theo", 
     "Volk",
-    "Wir"
+    "Wir",
+    "Oeko"
 ]
 def ocr_core(filename):
     """
@@ -84,11 +86,15 @@ def ocrtxt(filename):
             file.write(text)
             
     return text
-    
+
+def digits(filename):
+    text = pytesseract.image_to_string(filename)
+    digit=re.findall(r'\d+', text)
+    return digit
+
 if __name__ == '__main__':
-    txt= ocrtxt('img/decipher.png')
-    print(txt)
-    # lesson="Che"
+    digit = ocr_core("C:/Users/aky547/Desktop/img/item/gesamtinfoheading.png")
+    print(digit)
     # if lesson in txt:
     #     if lesson in FIELDS_TO_DELETE:
     #         print("found")

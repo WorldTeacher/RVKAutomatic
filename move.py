@@ -19,3 +19,6 @@ def change_window(window_name):
         print(e)    
         raise Exception("Error occured, aborting")
     
+    
+if __name__ == '__main__':
+    change_window("PHFR: Katalog")

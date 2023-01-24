@@ -1,0 +1,470 @@
+{
+    "1": {
+        "SIG": "VB 4071 I24",
+        "NOT": "GA",
+        "EDI": "",
+        "PPN": "1532822669"
+    },
+    "2": {
+        "SIG": "VB 4045 P525",
+        "NOT": "Mehrfachex.",
+        "EDI": "Neubearb., 3. Aufl.",
+        "PPN": "349528462"
+    },
+    "3": {
+        "SIG": "VB 2300 O12",
+        "NOT": "GA",
+        "EDI": "",
+        "PPN": "1473658047"
+    },
+    "4": {
+        "SIG": "VB 4063 S348",
+        "NOT": "GA",
+        "EDI": "",
+        "PPN": "1408436450"
+    },
+    "5": {
+        "SIG": "VB 4062 T228",
+        "NOT": "GA",
+        "EDI": "",
+        "PPN": "1162006528"
+    },
+    "6": {
+        "SIG": "WK 8700 D242",
+        "NOT": "Mehrfachex.",
+        "EDI": "1. Aufl. (dieser Ausg.), f\ufffdr die Beck'sche Reihe neu \ufffdberarb.",
+        "PPN": "265862124"
+    },
+    "7": {
+        "SIG": "VN 9280 E34",
+        "NOT": "Mehrfachex.",
+        "EDI": "",
+        "PPN": "026709988"
+    },
+    "8": {
+        "SIG": "VB 4063 K81",
+        "NOT": "GA",
+        "EDI": "",
+        "PPN": "1165222418"
+    },
+    "9": {
+        "SIG": "VB 4045 F912",
+        "NOT": "GA",
+        "EDI": "",
+        "PPN": "1163343404"
+    },
+    "10": {
+        "SIG": " ",
+        "NOT": "GA ausgesondert",
+        "EDI": "",
+        "PPN": "1159352488"
+    },
+    "11": {
+        "SIG": "VB 4063 F895",
+        "NOT": "GA",
+        "EDI": "",
+        "PPN": "1148910441"
+    },
+    "12": {
+        "SIG": "VB 2000 E55",
+        "NOT": "GA",
+        "EDI": "",
+        "PPN": "1148868313"
+    },
+    "13": {
+        "SIG": "VC 5020 B254",
+        "NOT": "GA",
+        "EDI": "",
+        "PPN": "1141871416"
+    },
+    "14": {
+        "SIG": "VB 4053 K43",
+        "NOT": "GA",
+        "EDI": "",
+        "PPN": "1134826230"
+    },
+    "15": {
+        "SIG": "VB 4063 F965",
+        "NOT": "GA",
+        "EDI": "",
+        "PPN": "1123312311"
+    },
+    "16": {
+        "SIG": " ",
+        "NOT": "GA ausgesondert",
+        "EDI": "",
+        "PPN": "1119715881"
+    },
+    "17": {
+        "SIG": "VB 4062 G562",
+        "NOT": "GA",
+        "EDI": "",
+        "PPN": "1114926752"
+    },
+    "18": {
+        "SIG": "VB 4072 J35",
+        "NOT": "GA",
+        "EDI": "[Neubearb.]",
+        "PPN": "111177207X"
+    },
+    "19": {
+        "SIG": "TB 4060 K89",
+        "NOT": "GA",
+        "EDI": "",
+        "PPN": "1109921810"
+    },
+    "20": {
+        "SIG": " ",
+        "NOT": "GA gel\ufffdscht",
+        "EDI": "",
+        "PPN": "1106050851"
+    },
+    "21": {
+        "SIG": " ",
+        "NOT": "GA gel\ufffdscht",
+        "EDI": "",
+        "PPN": "110129261X"
+    },
+    "22": {
+        "SIG": " ",
+        "NOT": "GA umsigniert",
+        "EDI": "",
+        "PPN": "1101218762"
+    },
+    "23": {
+        "SIG": " ",
+        "NOT": "GA gel\ufffdscht",
+        "EDI": "",
+        "PPN": "1099745470"
+    },
+    "24": {
+        "SIG": "VB 4045 G389",
+        "NOT": "GA",
+        "EDI": "",
+        "PPN": "1095427431"
+    },
+    "25": {
+        "SIG": "VB 4062 W243",
+        "NOT": "GA",
+        "EDI": "",
+        "PPN": "1094339040"
+    },
+    "26": {
+        "SIG": "VB 2000 H374",
+        "NOT": "GA",
+        "EDI": "",
+        "PPN": "1092656367"
+    },
+    "27": {
+        "SIG": "VB 4063 G874",
+        "NOT": "GA ",
+        "EDI": "",
+        "PPN": "1084219174"
+    },
+    "28": {
+        "SIG": " ",
+        "NOT": "GA gel\ufffdscht",
+        "EDI": "",
+        "PPN": "1083017381"
+    },
+    "29": {
+        "SIG": " ",
+        "NOT": "GA ausgesondert",
+        "EDI": "",
+        "PPN": "1081719117"
+    },
+    "30": {
+        "SIG": " ",
+        "NOT": "GA ausgesondert",
+        "EDI": "Durchges. Neudr.",
+        "PPN": "1081477474"
+    },
+    "31": {
+        "SIG": " ",
+        "NOT": "GA ausgesondert",
+        "EDI": "",
+        "PPN": "108147226X"
+    },
+    "32": {
+        "SIG": " ",
+        "NOT": "GA gel\ufffdscht",
+        "EDI": "",
+        "PPN": "1081471387"
+    },
+    "33": {
+        "SIG": " ",
+        "NOT": "GA ausgesondert",
+        "EDI": "",
+        "PPN": "1075209420"
+    },
+    "34": {
+        "SIG": " ",
+        "NOT": "GA umsigniert",
+        "EDI": "",
+        "PPN": "1074001877"
+    },
+    "35": {
+        "SIG": "VN 1000 B287 ",
+        "NOT": "GA",
+        "EDI": "4., neubearb. u. erw. Aufl.",
+        "PPN": "1073621235"
+    },
+    "36": {
+        "SIG": "VH 5010 H737 A6 (103)",
+        "NOT": "GA",
+        "EDI": "103. Auflage",
+        "PPN": "1542902630"
+    },
+    "37": {
+        "SIG": "VC 1000 B846 -1(10)",
+        "NOT": "Titel h\ufffdngt an der falschen GA",
+        "EDI": "Orig.-Ausg., 10., korr. und aktualisierte Aufl.",
+        "PPN": "1326653377"
+    },
+    "38": {
+        "SIG": "VN 6050 D184 (2)",
+        "NOT": "GA",
+        "EDI": "2., completely rev. and enl. ed.",
+        "PPN": "142026303X"
+    },
+    "39": {
+        "SIG": "VK 5000 O68",
+        "NOT": "GA",
+        "EDI": "",
+        "PPN": "1419649221"
+    },
+    "40": {
+        "SIG": "VC 1000 B283",
+        "NOT": "GA",
+        "EDI": "",
+        "PPN": "1136187324"
+    },
+    "41": {
+        "SIG": " ",
+        "NOT": "gel\ufffdscht",
+        "EDI": "",
+        "PPN": "186443501"
+    },
+    "42": {
+        "SIG": "VB 4150 D486",
+        "NOT": "GA",
+        "EDI": "",
+        "PPN": "131142003"
+    },
+    "43": {
+        "SIG": "WB 1410 L679",
+        "NOT": "GA",
+        "EDI": "",
+        "PPN": "171213882"
+    },
+    "44": {
+        "SIG": " ",
+        "NOT": "gel\ufffdscht",
+        "EDI": "",
+        "PPN": "1183942486"
+    },
+    "45": {
+        "SIG": "VB 4600 E11",
+        "NOT": "an Anni melden ?",
+        "EDI": "",
+        "PPN": "168660245"
+    },
+    "46": {
+        "SIG": "VB 2300 S927",
+        "NOT": "GA",
+        "EDI": "",
+        "PPN": "1150534850"
+    },
+    "47": {
+        "SIG": "WB 1410 F194",
+        "NOT": "GA",
+        "EDI": "",
+        "PPN": "1145252567"
+    },
+    "48": {
+        "SIG": " ",
+        "NOT": "gel\ufffdscht",
+        "EDI": "",
+        "PPN": "1125147369"
+    },
+    "49": {
+        "SIG": "VC 1000 R715 C5",
+        "NOT": "GA",
+        "EDI": "",
+        "PPN": "1125031891"
+    },
+    "50": {
+        "SIG": " ",
+        "NOT": "gel\ufffdscht",
+        "EDI": "",
+        "PPN": "1123604983"
+    },
+    "51": {
+        "SIG": "VC 1000 R715",
+        "NOT": "GA",
+        "EDI": "Paperback-Ausg.",
+        "PPN": "1118903226"
+    },
+    "52": {
+        "SIG": "VK 5010 F793",
+        "NOT": "GA",
+        "EDI": "",
+        "PPN": "1117280551"
+    },
+    "53": {
+        "SIG": "VC 5010 A749",
+        "NOT": "GA",
+        "EDI": "",
+        "PPN": "1110802641"
+    },
+    "54": {
+        "SIG": "VH 5010 C554",
+        "NOT": "GA",
+        "EDI": "",
+        "PPN": "1107430984"
+    },
+    "55": {
+        "SIG": " ",
+        "NOT": "gel\ufffdscht",
+        "EDI": "",
+        "PPN": "1105337065"
+    },
+    "56": {
+        "SIG": "VK 5000 R595",
+        "NOT": "GA",
+        "EDI": "",
+        "PPN": "1097099881"
+    },
+    "57": {
+        "SIG": "VC 5010 B881",
+        "NOT": "GA",
+        "EDI": "",
+        "PPN": "1092667261"
+    },
+    "58": {
+        "SIG": "VC 5000 K43",
+        "NOT": "GA",
+        "EDI": "",
+        "PPN": "1091885044"
+    },
+    "59": {
+        "SIG": " ",
+        "NOT": "gel\ufffdscht",
+        "EDI": "Kompaktausgabe",
+        "PPN": "1088004121"
+    },
+    "60": {
+        "SIG": " ",
+        "NOT": "gel\ufffdscht",
+        "EDI": "",
+        "PPN": "1086816676"
+    },
+    "61": {
+        "SIG": "VK 5010 C554",
+        "NOT": "GA",
+        "EDI": "",
+        "PPN": "1086789172"
+    },
+    "62": {
+        "SIG": "VK 5010 V923",
+        "NOT": "GA B\ufffdnde unter Che E 10: 51",
+        "EDI": "",
+        "PPN": "1086635027"
+    },
+    "63": {
+        "SIG": "VE 5000 A874",
+        "NOT": "GA",
+        "EDI": "",
+        "PPN": "1086560930"
+    },
+    "64": {
+        "SIG": "VB 4045 G611",
+        "NOT": "GA",
+        "EDI": "",
+        "PPN": "1084010046"
+    },
+    "65": {
+        "SIG": "VH 5100 K81",
+        "NOT": "GA",
+        "EDI": "",
+        "PPN": "1083347578"
+    },
+    "66": {
+        "SIG": "VT 5300 H694",
+        "NOT": "GA",
+        "EDI": "",
+        "PPN": "1082805254"
+    },
+    "67": {
+        "SIG": " ",
+        "NOT": "gel\ufffdscht",
+        "EDI": "",
+        "PPN": "1082488968"
+    },
+    "68": {
+        "SIG": "VB 4150 H768",
+        "NOT": "GA",
+        "EDI": "",
+        "PPN": "1082468487"
+    },
+    "69": {
+        "SIG": " ",
+        "NOT": "gel\ufffdscht",
+        "EDI": "",
+        "PPN": "108186656X"
+    },
+    "70": {
+        "SIG": "VK 5010 A437",
+        "NOT": "GA",
+        "EDI": "",
+        "PPN": "108141278X"
+    },
+    "71": {
+        "SIG": " ",
+        "NOT": "gel\ufffdscht",
+        "EDI": "",
+        "PPN": "1081403691"
+    },
+    "72": {
+        "SIG": " ",
+        "NOT": "gel\ufffdscht",
+        "EDI": "1. - 3. Aufl.",
+        "PPN": "107887090X"
+    },
+    "73": {
+        "SIG": "VC 1000 B846",
+        "NOT": "GA dies ist die falsche GA",
+        "EDI": "",
+        "PPN": "1078722234"
+    },
+    "74": {
+        "SIG": " ",
+        "NOT": "gel\ufffdscht",
+        "EDI": "",
+        "PPN": "1077662467"
+    },
+    "75": {
+        "SIG": " ",
+        "NOT": "gel\ufffdscht",
+        "EDI": "",
+        "PPN": "1077551878"
+    },
+    "76": {
+        "SIG": " ",
+        "NOT": "gel\ufffdscht",
+        "EDI": "",
+        "PPN": "1075538041"
+    },
+    "77": {
+        "SIG": " ",
+        "NOT": "gel\ufffdscht",
+        "EDI": "",
+        "PPN": "1075197880"
+    },
+    "78": {
+        "SIG": " ",
+        "NOT": "gel\ufffdscht",
+        "EDI": "",
+        "PPN": "1074120515"
+    }
+}

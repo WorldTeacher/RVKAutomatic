@@ -3,7 +3,7 @@ import os
 
 class log:
     def __init__(self) -> None:
-        logging.basicConfig(filename='data/logs/test.log',level=logging.DEBUG,format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        logging.basicConfig(filename='data/logs/program.log',level=logging.DEBUG,format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
         self.bot_log = logging.getLogger('bot')
     def bot_info(self, message):
         self.bot_log.info(message)

@@ -95,20 +95,8 @@ def create_json(file, output_file,file_encoding="utf-8"):
         json.dump(notes_json_entries, outfile, indent=4,sort_keys=False,ensure_ascii=False)
 
 
-# def remove_entries_with_notes(file, output_file):
-#     #iterate through json file, remove entries with notes add them to a new file
-#     new_json={}
-#     with open(file, 'r') as json_file:
-#         data = json.load(json_file)
-#         for key in data:
-#             if data[key]["notes"] == None:
-#                 continue
-#             else:
-#                 new_json[key]=data[key]
-#                 data.
-#     with open(output_file, 'a') as outfile:
-#         json.dump(new_json, outfile, indent=4,sort_keys=False,ensure_ascii=False)
-create_json(file="data/source/chemie_raw.txt",output_file="data/chemies.json") 
+
+# create_json(file="data/source/chemie_raw.txt",output_file="data/chemies.json") 
 
 # remove_entries_with_notes(file="data/chemie copy.json",output_file="data/chemie_notes.json")
 

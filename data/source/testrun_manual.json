@@ -1,0 +1,434 @@
+{
+    "1": {
+        "SIG": "VB 4073 P959",
+        "NOT": "GA",
+        "EDI": "Differenzierende Ausgabe Baden-W\ufffdrttemberg [ab 2017]",
+        "PPN": "1556685203"
+    },
+    "2": {
+        "SIG": "VB 4073 F139",
+        "NOT": "GA",
+        "EDI": "Gesamtband Baden-W\ufffdrttemberg",
+        "PPN": "1554668441"
+    },
+    "3": {
+        "SIG": "VH 5010 H737 A6 (103)",
+        "NOT": "GA",
+        "EDI": "103. Auflage",
+        "PPN": "1542902630"
+    },
+    "4": {
+        "SIG": "VB 4073 L524",
+        "NOT": "GA",
+        "EDI": "Differenzierende Ausgabe Baden-W\ufffdrttemberg",
+        "PPN": "1560703814"
+    },
+    "5": {
+        "SIG": "VB 4073 B648 C5",
+        "NOT": "GA",
+        "EDI": "Differenzierende Ausgabe Baden-W\ufffdrttemberg",
+        "PPN": "1549535021"
+    },
+    "6": {
+        "SIG": "VC 1000 B846 -1(10)",
+        "NOT": "Titel h\ufffdngt an der falschen GA",
+        "EDI": "Orig.-Ausg., 10., korr. und aktualisierte Aufl.",
+        "PPN": "1326653377"
+    },
+    "7": {
+        "SIG": "VN 6050 D184 (2)",
+        "NOT": "GA",
+        "EDI": "2., completely rev. and enl. ed.",
+        "PPN": "142026303X"
+    },
+    "8": {
+        "SIG": "VK 5000 O68",
+        "NOT": "GA",
+        "EDI": "",
+        "PPN": "1419649221"
+    },
+    "9": {
+        "SIG": "VB 4073 I61",
+        "NOT": "GA",
+        "EDI": "Realschule Baden-W\ufffdrttemberg",
+        "PPN": "1190958333"
+    },
+    "10": {
+        "SIG": "VB 4073 H595 B1",
+        "NOT": "GA",
+        "EDI": "Baden-W\ufffdrttemberg",
+        "PPN": "1184923558"
+    },
+    "11": {
+        "SIG": "VB 4072 U61 (N)",
+        "NOT": "GA",
+        "EDI": "[\ufffdberregionale Ausgabe], Neubearb.",
+        "PPN": "1155481186"
+    },
+    "12": {
+        "SIG": "VC 1000 B283",
+        "NOT": "GA",
+        "EDI": "",
+        "PPN": "1136187324"
+    },
+    "13": {
+        "SIG": "VB 4073 B648",
+        "NOT": "an die Stufe 2: bitte die GA in aDIS gearbeiten, danke",
+        "EDI": "",
+        "PPN": "1106620496"
+    },
+    "14": {
+        "SIG": " ",
+        "NOT": "gel\ufffdscht",
+        "EDI": "",
+        "PPN": "186443501"
+    },
+    "15": {
+        "SIG": "VB 4150 D486",
+        "NOT": "GA",
+        "EDI": "",
+        "PPN": "131142003"
+    },
+    "16": {
+        "SIG": "WB 1410 L679",
+        "NOT": "GA",
+        "EDI": "",
+        "PPN": "171213882"
+    },
+    "17": {
+        "SIG": " ",
+        "NOT": "gel\ufffdscht",
+        "EDI": "",
+        "PPN": "1183942486"
+    },
+    "18": {
+        "SIG": "VB 4600 E11",
+        "NOT": "an Anni melden ?",
+        "EDI": "",
+        "PPN": "168660245"
+    },
+    "19": {
+        "SIG": " ",
+        "NOT": "gel\ufffdscht",
+        "EDI": "",
+        "PPN": "1183802625"
+    },
+    "20": {
+        "SIG": " ",
+        "NOT": "gel\ufffdscht",
+        "EDI": "",
+        "PPN": "1182389902"
+    },
+    "21": {
+        "SIG": "VB 4063 K83",
+        "NOT": "GA",
+        "EDI": "",
+        "PPN": "1174525592"
+    },
+    "22": {
+        "SIG": "VB 4073 D987",
+        "NOT": "GA",
+        "EDI": "",
+        "PPN": "1158907060"
+    },
+    "23": {
+        "SIG": "VB 2300 S927",
+        "NOT": "GA",
+        "EDI": "",
+        "PPN": "1150534850"
+    },
+    "24": {
+        "SIG": "WB 1410 F194",
+        "NOT": "GA",
+        "EDI": "",
+        "PPN": "1145252567"
+    },
+    "25": {
+        "SIG": "VB 4072 E38",
+        "NOT": "GA",
+        "EDI": "Ausg. Baden-W\ufffdrttemberg",
+        "PPN": "1125482303"
+    },
+    "26": {
+        "SIG": " ",
+        "NOT": "gel\ufffdscht",
+        "EDI": "",
+        "PPN": "1125147369"
+    },
+    "27": {
+        "SIG": "VC 1000 R715 C5",
+        "NOT": "GA",
+        "EDI": "",
+        "PPN": "1125031891"
+    },
+    "28": {
+        "SIG": " ",
+        "NOT": "gel\ufffdscht",
+        "EDI": "",
+        "PPN": "1123604983"
+    },
+    "29": {
+        "SIG": "VB 4073 R288",
+        "NOT": "GA",
+        "EDI": "Baden-W\ufffdrttemberg",
+        "PPN": "111973228X"
+    },
+    "30": {
+        "SIG": "VB 4073 H595 A8 (N)",
+        "NOT": "GA",
+        "EDI": "Gymnasium ; Baden-W\ufffdrttemberg ; Neubearb.",
+        "PPN": "1119295203"
+    },
+    "31": {
+        "SIG": "VC 1000 R715",
+        "NOT": "GA",
+        "EDI": "Paperback-Ausg.",
+        "PPN": "1118903226"
+    },
+    "32": {
+        "SIG": "VK 5010 F793",
+        "NOT": "GA",
+        "EDI": "",
+        "PPN": "1117280551"
+    },
+    "33": {
+        "SIG": "VB 4073 G997",
+        "NOT": "GA",
+        "EDI": "L\ufffdnderausgabe Baden-W\ufffdrttemberg",
+        "PPN": "1115968068"
+    },
+    "34": {
+        "SIG": "VB 4072 V566 (N)",
+        "NOT": "GA",
+        "EDI": "Neubearb.",
+        "PPN": "1115015036"
+    },
+    "35": {
+        "SIG": "VB 4073 C517",
+        "NOT": "GA",
+        "EDI": "Hauptschule Baden-W\ufffdrttemberg",
+        "PPN": "1112542663"
+    },
+    "36": {
+        "SIG": "VB 4073 F944",
+        "NOT": "GA",
+        "EDI": "[Ausg. Baden-W\ufffdrttemberg]",
+        "PPN": "111249216X"
+    },
+    "37": {
+        "SIG": "VC 5010 A749",
+        "NOT": "GA",
+        "EDI": "",
+        "PPN": "1110802641"
+    },
+    "38": {
+        "SIG": "VH 5010 C554",
+        "NOT": "GA",
+        "EDI": "",
+        "PPN": "1107430984"
+    },
+    "39": {
+        "SIG": " ",
+        "NOT": "gel\ufffdscht",
+        "EDI": "",
+        "PPN": "1105337065"
+    },
+    "40": {
+        "SIG": "VB 4073 H595",
+        "NOT": "GA",
+        "EDI": "Sekundarbereich I",
+        "PPN": "1103904884"
+    },
+    "41": {
+        "SIG": " ",
+        "NOT": "gel\ufffdscht",
+        "EDI": "",
+        "PPN": "1102175099"
+    },
+    "42": {
+        "SIG": " ",
+        "NOT": "GA Einzelsignaturen",
+        "EDI": "Ausg. f\ufffdr Baden-W\ufffdrttemberg",
+        "PPN": "1098226453"
+    },
+    "43": {
+        "SIG": "VK 5000 R595",
+        "NOT": "GA",
+        "EDI": "",
+        "PPN": "1097099881"
+    },
+    "44": {
+        "SIG": " ",
+        "NOT": "gel\ufffdscht",
+        "EDI": "",
+        "PPN": "1094901180"
+    },
+    "45": {
+        "SIG": "VC 5010 B881",
+        "NOT": "GA",
+        "EDI": "",
+        "PPN": "1092667261"
+    },
+    "46": {
+        "SIG": "VB 4072 E38 C5",
+        "NOT": "GA",
+        "EDI": "[\ufffdberregionale Ausgabe]",
+        "PPN": "109206883X"
+    },
+    "47": {
+        "SIG": "VC 5000 K43",
+        "NOT": "GA",
+        "EDI": "",
+        "PPN": "1091885044"
+    },
+    "48": {
+        "SIG": "VB 4092 K63",
+        "NOT": "GA",
+        "EDI": "",
+        "PPN": "1088933483"
+    },
+    "49": {
+        "SIG": " ",
+        "NOT": "gel\ufffdscht",
+        "EDI": "Kompaktausgabe",
+        "PPN": "1088004121"
+    },
+    "50": {
+        "SIG": " ",
+        "NOT": "gel\ufffdscht",
+        "EDI": "",
+        "PPN": "1086816676"
+    },
+    "51": {
+        "SIG": "VK 5010 C554",
+        "NOT": "GA",
+        "EDI": "",
+        "PPN": "1086789172"
+    },
+    "52": {
+        "SIG": "VK 5010 V923",
+        "NOT": "GA B\ufffdnde unter Che E 10: 51",
+        "EDI": "",
+        "PPN": "1086635027"
+    },
+    "53": {
+        "SIG": "VE 5000 A874",
+        "NOT": "GA",
+        "EDI": "",
+        "PPN": "1086560930"
+    },
+    "54": {
+        "SIG": "VB 4045 G611",
+        "NOT": "GA",
+        "EDI": "",
+        "PPN": "1084010046"
+    },
+    "55": {
+        "SIG": "VH 5100 K81",
+        "NOT": "GA",
+        "EDI": "",
+        "PPN": "1083347578"
+    },
+    "56": {
+        "SIG": "VT 5300 H694",
+        "NOT": "GA",
+        "EDI": "",
+        "PPN": "1082805254"
+    },
+    "57": {
+        "SIG": " ",
+        "NOT": "gel\ufffdscht",
+        "EDI": "",
+        "PPN": "1082488968"
+    },
+    "58": {
+        "SIG": "VB 4150 H768",
+        "NOT": "GA",
+        "EDI": "",
+        "PPN": "1082468487"
+    },
+    "59": {
+        "SIG": " ",
+        "NOT": "gel\ufffdscht",
+        "EDI": "",
+        "PPN": "108186656X"
+    },
+    "60": {
+        "SIG": " ",
+        "NOT": "gel\ufffdscht",
+        "EDI": "",
+        "PPN": "1081472111"
+    },
+    "61": {
+        "SIG": "VK 5010 A437",
+        "NOT": "GA",
+        "EDI": "",
+        "PPN": "108141278X"
+    },
+    "62": {
+        "SIG": " ",
+        "NOT": "gel\ufffdscht",
+        "EDI": "",
+        "PPN": "1081403691"
+    },
+    "63": {
+        "SIG": " ",
+        "NOT": "gel\ufffdscht",
+        "EDI": "1. - 3. Aufl.",
+        "PPN": "107887090X"
+    },
+    "64": {
+        "SIG": "VC 1000 B846",
+        "NOT": "GA dies ist die falsche GA",
+        "EDI": "",
+        "PPN": "1078722234"
+    },
+    "65": {
+        "SIG": " ",
+        "NOT": "gel\ufffdscht",
+        "EDI": "",
+        "PPN": "1077662467"
+    },
+    "66": {
+        "SIG": " ",
+        "NOT": "gel\ufffdscht",
+        "EDI": "",
+        "PPN": "1077551878"
+    },
+    "67": {
+        "SIG": " ",
+        "NOT": "gel\ufffdscht",
+        "EDI": "",
+        "PPN": "1076105734"
+    },
+    "68": {
+        "SIG": " ",
+        "NOT": "gel\ufffdscht",
+        "EDI": "",
+        "PPN": "1075538041"
+    },
+    "69": {
+        "SIG": " ",
+        "NOT": "gel\ufffdscht",
+        "EDI": "",
+        "PPN": "1075197880"
+    },
+    "70": {
+        "SIG": " ",
+        "NOT": "gel\ufffdscht",
+        "EDI": "",
+        "PPN": "1075013232"
+    },
+    "71": {
+        "SIG": " ",
+        "NOT": "gel\ufffdscht",
+        "EDI": "",
+        "PPN": "1074120515"
+    },
+    "72": {
+        "SIG": "VC 1000 A617",
+        "NOT": "GA",
+        "EDI": "",
+        "PPN": "1073809986"
+    }
+}
