@@ -357,12 +357,12 @@ class TestBot:
                 self.error()    
         pyautogui.moveTo(*START_POSITION)
 
-    def error(self): #* done
-        import traceback
-        trace=traceback.format_exc()
-        self.logging.bot_critical("Error occured, aborting")
-        send_notification(f"Error, {trace}", "PC1","error")
-        raise Exception("Error occured, aborting")   
+    # def error(self): #* done
+    #     import traceback
+    #     trace=traceback.format_exc()
+    #     self.logging.bot_critical("Error occured, aborting")
+    #     send_notification(f"Error, {trace}", "PC1","error")
+    #     raise Exception("Error occured, aborting")   
 
 if __name__ == '__main__':
     # b = Bot(json.load(open('./data/positions/config.json')))
