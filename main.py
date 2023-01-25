@@ -1,4 +1,4 @@
-import bot
+from bot import Bot, ControlBot#,TestBot
 import json
 import time
 from discord_notification import *
@@ -9,7 +9,7 @@ from preprocess import Preprocess
 
 class Main:
     def __init__(self) -> None:
-        self.testbot = bot.TestBot()
+        self.testbot = Bot()
         pass
     
     def run(self,autojson,manualjson):
@@ -34,9 +34,10 @@ class Main:
                 continue
             else:
                 #remove entry from auto json
-                del data[entry]
+                #del data[entry]
                 with open(autojson,"w",encoding="utf-8") as f:
                     json.dump(data,f,indent=4)
+                    
                 continue
        
        
@@ -71,8 +72,9 @@ class Main:
             i+=1
         
     def control(self):
-        controlbot = bot.ControlBot()
+        controlbot = ControlBot()
         truly_done={}
+        error_done={}
         with open("data/source/chemie_merged.json","r",encoding="utf-8") as f:
             test_data=json.load(f)
         for entry in test_data:
@@ -81,42 +83,22 @@ class Main:
             notification=test_data[entry]["NOT"]
             edition=test_data[entry]["EDI"]
             if controlbot.run(ppn=ppn,signatur=signatur)==True:
+                send_embedded_message_control(ppn=ppn, signatur=signatur,message="Both fields were changed")
                 with open("data/results/chemie.json","r",encoding="utf-8") as f:
                     data=json.load(f)
                 curr_entry=len(data)+1
                 truly_done[curr_entry]={"PPN":ppn,"SIG":signatur,"NOT":notification,"EDI":edition}
-                
-        # # testbot = bot.TestBot()
-        # with open(manualjson,"w",encoding="utf-8") as f:
-        #     data=json.load(f)
-        # for i in data:
-        #     ppn = data[i]["PPN"]
-        #     signature = data[i]["SIG"]
-        #     edition = data[i]["EDI"]
-        #     notice = data[i]["NOT"]
-            
-        #     with open(manualjson,"r",encoding="utf-8") as f:
-        #         auto_data=json.load(f)
-            
-        #     if testbot.run(ppn=ppn, signatur=signature)==None:
-        #         print("failed")
-        #     with open(manualjson,"w",encoding="utf-8") as f:
-        #         this_data={
-        #             "PPN":ppn,
-        #             "SIG":signature,
-        #             "EDI":edition,
-        #             "NOT":notice
-        #         }
-            
-        #         json.update(f,this_data)
-        #     send_notification(f"Failed at {i}/{len(data)}","Computer Alexander","error")
-        #     #     break
-        #     # else:
-        #     #     print("success")
-        #     # time.sleep(30)
-        #     # # send_notification(f"{i}/{len(data)}","Computer Alexander","info")
-            
-            
+                with open("data/results/chemie.json","w",encoding="utf-8") as f:
+                    json.dump(truly_done,f,indent=4)
+            else:
+                send_embedded_message_control(ppn=ppn, signatur=signatur, message="One or more fields were not changed, see errors.json for more details")
+                with open("data/results/errors.json","r") as f:
+                    error_data = json.load(f)
+                curr_error_entry=len(data)+1
+                error_done[curr_error_entry]={"PPN":ppn,"SIG":signatur,"NOT":notification,"EDI":edition}
+                with open("data/results/errors.json","r") as f:
+                    json.dump(error_done,f,indent=4)   
+   
             
             
             
@@ -124,22 +106,7 @@ if __name__ == "__main__":
     # autojson,manualjson = Preprocess(file="data/source/newexport.json", output_file="data/source/trial.json", file_encoding="utf-8").main()
     # print(autojson,manualjson)
     # main=Main().run(autojson=autojson,manualjson=manualjson)       
-    main=Main().test(file="data/test.json")
-# testbot = bot.TestBot()
-
-# jsonfile = "data/source/newexport.json"
-
-# with open(jsonfile, "r", encoding="utf-8") as f:
-#     jsonfile = json.load(f)
-#     print(len(jsonfile))
-# for i in jsonfile:
-#     ppn = jsonfile[i]["PPN"]
-#     signature = jsonfile[i]["SIG"]
-#     if testbot.run(ppn=ppn, signatur=signature)==False:
-#         print("failed")
-#         with open()
-#         continue
-#     else:
-#         print("success")
-#     time.sleep(3)
-#     send_notification(f"{i}/{len(jsonfile)}","Computer Alexander","info")
+    
+    
+    # main=Main().test(file="data/test.json")
+    contrl=Main().control()
