@@ -5,3 +5,4 @@ img/item/test.png
 main/
 *testdata.*
 *.log
+preprocessing/Oberfell_to_tsv/*
