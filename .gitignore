@@ -6,3 +6,5 @@ main/
 *testdata.*
 *.log
 preprocessing/Oberfell_to_tsv/*
+node_modules
+presentation/
