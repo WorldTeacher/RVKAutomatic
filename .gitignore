@@ -8,3 +8,6 @@ main/
 preprocessing/Oberfell_to_tsv/*
 node_modules
 presentation/
+rvkauto.mp4
+package-lock.json
+package.json
