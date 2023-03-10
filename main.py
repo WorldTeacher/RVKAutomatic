@@ -28,9 +28,9 @@ class Main:
             today_runs = len(os.listdir(f'{output_folder}/{date.today()}'))
             
         print(files_in_input)
-        if len(files_in_input)>1:
-            print("Only one file, sorry")
-            exit()
+        if len(files_in_input)>1: #work on issue#2
+            if "resume.json" in files_in_input:
+                pass
         print(f"starting work on {files_in_input[0]}")
         curr_date=date.today()
         print(curr_date)
