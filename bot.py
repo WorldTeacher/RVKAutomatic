@@ -13,11 +13,6 @@ FAILSAFE_LOCATION = (0,0)
 EDIT_POSITION = (525,90)
 DELAY = 0.5
 
-# USERNAME = "phfr" '#! not used
-# PASSWORD = "freiburg" '#! not used
-
-
-
 class Bot:
     """
     Create the bot object. Add debug=True to the constructor to disable the startup sequence.
@@ -57,7 +52,8 @@ class Bot:
             return False
         else:
             pyautogui.moveTo(*pyautogui.center(image_position))
-            return True  
+            return True 
+         
     def mti_rel(self, image,rel_coords=(0,0)):
         """
         extension of move_to_image, moves relativly after finding the image
@@ -128,7 +124,7 @@ class Bot:
                 time.sleep(delay)
         return False
 
-    def check_ocr(self, region:tuple, text:str, n_tries:int=10, delay:float=DELAY):
+    def check_ocr(self, save_path, region:tuple, text:str, n_tries:int=10, delay:float=DELAY, ):
         """
         checks if the screen contains the text, retries n times with delay in seconds
         
@@ -144,8 +140,8 @@ class Bot:
         #check if screen contains text, retry n times with delay in seconds
         tries=0
         while tries < n_tries:
-            pyautogui.screenshot(region=region).save("img/main/info.png")
-            if imagerecognition.ocr_core("img/main/info.png").split("\n")[0] == text:
+            pyautogui.screenshot(region=region).save(save_path)
+            if imagerecognition.ocr_core(save_path).split("\n")[0] == text:
                 self.logging.bot_info(f"found {text}")
                 return True
             else:
@@ -299,23 +295,42 @@ class Bot:
     def edit_gesamtinfo(self,signatur):
         
         self.enter_edit_mode()
-        self.check("img/item/sachersch.png",n_tries=10,delay=0.3,region=(340,120,250,50))
-        self.move_to_image("img/item/sachersch.png")
-        pyautogui.leftClick()
-        self.move_to_image("img/item/notation.png")
-        pyautogui.leftClick()
-        for i in range(5):
-            if self.remove_notation() == False:
-                break
-        pyautogui.moveTo(1160,665)                 
-        pyautogui.leftClick()
-        pyautogui.hotkey("ctrl","a")
-        time.sleep(0.02)
-        pyautogui.write(signatur) 
-        pyautogui.hotkey("altleft","p")
-        time.sleep(0.2)
-        if self.check("img/testresult.png",n_tries=3,delay=0.2):
-            pyautogui.click(1385, 964,clicks=3, interval=0.25)
+        time.sleep(3)
+        #self.check("img/item/sachersch.png",n_tries=10,delay=0.3,region=(340,120,250,50))
+        edit_y_n=self.check_ocr(region=(410,145,200,30),text="SacherschlieRung",n_tries=10,delay=DELAY,save_path="img/item/sachersch.png")
+        if edit_y_n==True:
+            self.move_to_image("img/item/sachersch.png")
+            pyautogui.leftClick()
+            pyautogui.moveTo(384,570)
+            pyautogui.leftClick()
+            for i in range(5):
+                if self.remove_notation() == False:
+                    break
+            pyautogui.moveTo(1160,665)                 
+            pyautogui.leftClick()
+            pyautogui.hotkey("ctrl","a")
+            time.sleep(0.02)
+            pyautogui.write(signatur) 
+            pyautogui.hotkey("altleft","p")
+            time.sleep(0.2)
+            if self.check("img/testresult.png",n_tries=3,delay=0.2):
+                 pyautogui.click(1385, 964,clicks=3, interval=0.25)
+        # self.move_to_image("img/item/sachersch.png")
+        # pyautogui.leftClick()
+        # self.move_to_image("img/item/notation.png")
+        # pyautogui.leftClick()
+        # for i in range(5):
+        #     if self.remove_notation() == False:
+        #         break
+        # pyautogui.moveTo(1160,665)                 
+        # pyautogui.leftClick()
+        # pyautogui.hotkey("ctrl","a")
+        # time.sleep(0.02)
+        # pyautogui.write(signatur) 
+        # pyautogui.hotkey("altleft","p")
+        # time.sleep(0.2)
+        # if self.check("img/testresult.png",n_tries=3,delay=0.2):
+        #     pyautogui.click(1385, 964,clicks=3, interval=0.25)
             #dn.send_embedded_message_control(ppn=self.ppn,signatur=signatur,message="Got a ResultError, clicked save, but best to check manually")
         
     def startup(self): #* done
@@ -346,14 +361,12 @@ class Bot:
         return True
     
     def item_screen(self,signatur):
-        if self.check_ocr(region=(900,150,130,40),text="Gesamtinfo")==False: #("img/item/gesamtinfoheading.png",n_tries=10,delay=0.3) == False:
+        if self.check_ocr(region=(900,150,130,40),text="Gesamtinfo",save_path="img/item/gesamtinfo.png")==False: #("img/item/gesamtinfoheading.png",n_tries=10,delay=0.3) == False:
             raise Exception("could not find gesamtinfoheading")
-        # if not self.check_screen(image="img/item/gesamtinfoheading.png"):
-        #     raise Exception("screen does not match")
         self.edit_gesamtinfo(signatur)
         # if self.check("img/item/gesamtinfoheading.png",n_tries=20,delay=0.2) == False:
 
-        if self.check_ocr(region=(900,150,130,40),text="Gesamtinfo")==False: #("img/item/gesamtinfoheading.png",n_tries=10,delay=0.3) == False:
+        if self.check_ocr(region=(900,150,130,40),text="Gesamtinfo",save_path="img/item/gesamtinfo.png")==False: #("img/item/gesamtinfoheading.png",n_tries=10,delay=0.3) == False:
             raise Exception("could not find gesamtinfoheading")
         #self.mti_rel(image="img/item/gesamtinfoheading.png",rel_coords=(0,100))
         self.scroll(n=2000, direction="down")
@@ -402,8 +415,8 @@ class Bot:
         pyautogui.moveTo(815,96)
         pyautogui.leftClick()
         pyautogui.moveTo(*START_POSITION)
-        if not self.check("img/count_base.png",delay=0.2):
-            raise Exception("could not find img/exemplar_anzahlEx1.png in exemplar_screen")
+        if not self.check(image="img/item/gesamtinfo.png",delay=0.3):
+            raise Exception("could not find img/exemplar_anzahlEx1.png in exemplar_screen") #TODO: replace with location detection
         self.logging.bot_info("alt+r finished")
         time.sleep(0.1)
         if self.commit() ==False:
@@ -413,6 +426,7 @@ class Bot:
         time.sleep(DELAY)
     
     def run(self,signatur:str, ppn:str):
+        time.sleep(DELAY*2)
         self.logging.bot_info("Run started")
         self.ppn = ppn
         self.signatur = signatur
@@ -499,7 +513,14 @@ class ControlBot(Bot):
 if __name__ == '__main__':
    
     bot=Bot()
-    bot.run(ppn="658422049",signatur="ZC 50000 L433") #!fix this title
+    
+    
+    for i in range(25):
+        print(i)
+        if bot.run(ppn="658422049",signatur="ZC 50000 L433")==False: #!fix this title3
+            print(f"failed on run {i}")
+    #bot.exemplar_screen("ZC 50000 L433")
+    #bot.edit_gesamtinfo("ZC 50000 L433")
     # bot.locate_and_click_checkbox()
     # bot.item_screen("ZC 10000 V916")
     # for i in range(200):
