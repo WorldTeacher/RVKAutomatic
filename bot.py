@@ -28,7 +28,7 @@ class Bot:
                 self.startup()    
         self.signatur = ""
         self.ppn = ""
-        self.oldnotation = []
+        self.oldnotation:list = []
         self.count=['1']
         self.this_count = []
 
@@ -65,7 +65,7 @@ class Bot:
         """
         try:
             if self.move_to_image(image=image)==False:
-                #dn.send_notification(message="Check PC, manual move needed", computer="PC1",type="warning")
+                dn.send_notification(message="Check PC, manual move needed", computer="PC1",type="warning")
                 #pyautogui.confirm(f'Failed to move to {image}, please move to {image} manually and press OK')
                 raise Exception(f"could not move to {image}, did not move relativly by {rel_coords}px")
             pyautogui.moveRel(*rel_coords)
@@ -124,7 +124,7 @@ class Bot:
                 time.sleep(delay)
         return False
 
-    def check_ocr(self, save_path, region:tuple, text:str, n_tries:int=10, delay:float=DELAY, ):
+    def check_ocr(self, region:tuple, text:str, save_path:str="img/defaults.png", n_tries:int=10, delay:float=DELAY, start_delay:float=0.2):
         """
         checks if the screen contains the text, retries n times with delay in seconds
         
@@ -139,9 +139,11 @@ class Bot:
         """
         #check if screen contains text, retry n times with delay in seconds
         tries=0
+        if start_delay != 0:
+            time.sleep(start_delay)
         while tries < n_tries:
             pyautogui.screenshot(region=region).save(save_path)
-            if imagerecognition.ocr_core(save_path).split("\n")[0] == text:
+            if imagerecognition.ocr_core(save_path).split("\n")[0] == text or text in imagerecognition.ocr_core(save_path):
                 self.logging.bot_info(f"found {text}")
                 return True
             else:
@@ -207,9 +209,9 @@ class Bot:
             time.sleep(DELAY)  #! dirty fix, only momentary
             pyautogui.click(1019,561)
             #pyautogui.hotkey("altleft","s")
-            ##dn.send_notification(f"Successfully changed PPN:**{self.ppn}**: \n ```-Removed {self.oldnotation}\n -Added {self.signatur}```","PC1","info")
+            #dn.send_notification(f"Successfully changed PPN:**{self.ppn}**: \n ```-Removed {self.oldnotation}\n -Added {self.signatur}```","PC1","info")
         else:
-            ##dn.send_notification(f"Commit failed for PPN:**{self.ppn}***: \n ```-Removed {self.oldnotation}\n -Added {self.signatur}```","PC1","critical")
+            #dn.send_notification(f"Commit failed for PPN:**{self.ppn}***: \n ```-Removed {self.oldnotation}\n -Added {self.signatur}```","PC1","critical")
             self.logging.bot_critical(f"commit failed, PPN: {self.ppn}")
             return False
                 
@@ -223,11 +225,11 @@ class Bot:
         text.replace("\n","")
         if "aDIS/Lokalsatz ist geandert worden" in text:
             print("commit success")
-            #dn.send_embedded_message_success(ppn=self.ppn, removed=self.oldnotation, changed=self.signatur)
+            dn.send_embedded_message_success(ppn=self.ppn, removed=self.oldnotation, changed=self.signatur)
             return True
         else:
             self.logging.bot_critical("commit failed")
-            #dn.send_embedded_message_error(ppn=self.ppn, removed=self.oldnotation, changed=self.signatur)
+            dn.send_embedded_message_error(ppn=self.ppn, removed=self.oldnotation, changed=self.signatur)
             return False
 
     def enter_edit_mode(self,gesamtinfo=False):
@@ -285,9 +287,9 @@ class Bot:
         elif (subject and subject2) not in imagerecognition.FIELDS_TO_DELETE:
             no_dellist.append(subject)
             no_dellist.append(subject2)
-            #dn.send_notification(f"Did not delete {no_dellist} for PPN:**{self.ppn}**","PC1","control")
+            dn.send_notification(f"Did not delete {no_dellist} for PPN:**{self.ppn}**","PC1","control")
             return False
-        #dn.send_notification(f"Deleted {dellist} for PPN:**{self.ppn}**","PC1","info")
+        dn.send_notification(f"Deleted {dellist} for PPN:**{self.ppn}**","PC1","info")
         dellist.clear()
         no_dellist.clear()
         return True
@@ -314,47 +316,29 @@ class Bot:
             pyautogui.hotkey("altleft","p")
             time.sleep(0.2)
             if self.check("img/testresult.png",n_tries=3,delay=0.2):
-                 pyautogui.click(1385, 964,clicks=3, interval=0.25)
-        # self.move_to_image("img/item/sachersch.png")
-        # pyautogui.leftClick()
-        # self.move_to_image("img/item/notation.png")
-        # pyautogui.leftClick()
-        # for i in range(5):
-        #     if self.remove_notation() == False:
-        #         break
-        # pyautogui.moveTo(1160,665)                 
-        # pyautogui.leftClick()
-        # pyautogui.hotkey("ctrl","a")
-        # time.sleep(0.02)
-        # pyautogui.write(signatur) 
-        # pyautogui.hotkey("altleft","p")
-        # time.sleep(0.2)
-        # if self.check("img/testresult.png",n_tries=3,delay=0.2):
-        #     pyautogui.click(1385, 964,clicks=3, interval=0.25)
-            #dn.send_embedded_message_control(ppn=self.ppn,signatur=signatur,message="Got a ResultError, clicked save, but best to check manually")
+                pyautogui.click(1385, 964,clicks=3, interval=0.25)
+                dn.send_embedded_message_control(ppn=self.ppn,signatur=signatur,message="Got a ResultError, clicked save, but best to check manually")
         
     def startup(self): #* done
         window_name = "PHFR: Katalog"
         if not window_name in pyautogui.getActiveWindow().title:
             self.logging.bot_info("waiting for window, checking if it exists")
             move.change_window("PHFR: Katalog")
+            pyautogui.click(10,1) #set focus manually, in some cases the window is not focused
             
         elif window_name in pyautogui.getActiveWindow().title:
             self.logging.bot_info("window found, checking if screen matches")
-            if not self.check_screen("img/main_menu/main_menu_btns.png"):
+            if not self.check_ocr(region=(0,100,150,30),text="Suche starten"):
                 raise Exception("screen does not match, didn't find main menu")    
         pyautogui.moveTo(*START_POSITION)
 
     def main_screen(self,ppn_number):       
-        # if self.check_screen("img/main_menu/main_menu_btns.png") == False:
-        #     print("could not find main menu buttons, are you on the main menu?")
-        #     exit()
-        # self.mti_rel(image="img/main_menu/ppn.png",rel_coords=(200,10))
+        
         pyautogui.leftClick()
         self.write_string(str(ppn_number), confirm=True) 
-        self.check(image="img/count_base.png",n_tries=10,delay=0.3)
-        if not self.check_count() == True:
-            #dn.send_notification(f"Got a count mismatch, expected {self.count} got {self.this_count}","PC1","warning")
+        #self.check(image="img/count_base.png",n_tries=10,delay=0.3)
+        if self.check_ocr(region=(1400,230,450,40),save_path="img/item/THIScount.png",text="Anzahl Ex. 1",n_tries=10,delay=0.3)==False:
+            dn.send_notification(f"Got a count mismatch, expected {self.count} got {self.this_count}","PC1","warning")
             pyautogui.hotkey('alt', 's')
             return False
         
@@ -370,16 +354,19 @@ class Bot:
             raise Exception("could not find gesamtinfoheading")
         #self.mti_rel(image="img/item/gesamtinfoheading.png",rel_coords=(0,100))
         self.scroll(n=2000, direction="down")
+        #! detect if scroll was executed
+        if self.check(region=(1805,215,30,70),image="img/item/scrollbar_present.png",n_tries=2,delay=0.1)==True:
+            self.scroll(n=2000, direction="down")
         #pyautogui.moveTo(*EXEMPLAR_POSITION)
         self.locate_and_click_checkbox()
         #self.check_if_clicked()
         self.enter_edit_mode(gesamtinfo=True)
     
-    def locate_and_click_checkbox(self):
+    def locate_and_click_checkbox(self,region=(EXEMPLAR_POSITION[0]-30,EXEMPLAR_POSITION[1]-30,50,50)):
         #if pyautogui.locate("img/empty.png","img/exemplar_clicked.png")==True:
-        location=pyautogui.locateOnScreen("img/empty_checkbox.png",region=(EXEMPLAR_POSITION[0]-30,EXEMPLAR_POSITION[1]-30,50,50))
+        location=pyautogui.locateOnScreen("img/empty_checkbox.png",region=region)
         pyautogui.click(location)
-        screenshot = pyautogui.screenshot(region=(EXEMPLAR_POSITION[0]-30,EXEMPLAR_POSITION[1]-30,50,50))
+        screenshot = pyautogui.screenshot(region=region)
         screenshot.save("img/exemplar_clicked.png")
         if pyautogui.locate("img/clicked_checkbox.png","img/exemplar_clicked.png") ==True:
             print("exemplar checkbox clicked")
@@ -392,7 +379,7 @@ class Bot:
         screenshot.save("img/exemplar_clicked.png")
         
         location=pyautogui.locateOnScreen("img/empty_checkbox.png",region=(EXEMPLAR_POSITION[0]-50,EXEMPLAR_POSITION[1]-50,50,50))
-        print(location)
+       # print(location)
         pyautogui.moveTo(location)
         pyautogui.leftClick()
         screenshot = pyautogui.screenshot(region=(EXEMPLAR_POSITION[0]-30,EXEMPLAR_POSITION[1]-30,50,50))
@@ -403,8 +390,9 @@ class Bot:
         self.logging.bot_info("exemplar screen")
         self.enter_edit_mode()
         pyautogui.moveTo(1093,369)
-        if not self.check(image="img/title/exemplar_conf.png",delay=0.3):
+        if not self.check_ocr(region=(0,130,245,40),text="Bearbeiten Exemplar",delay=0.2):
             Exception("could not find img/title/exemplar_stuff.png in exemplar_screen")
+            #return to try again
         pyautogui.leftClick()
         pyautogui.hotkey("ctrl","a")
         pyautogui.press("backspace")
@@ -415,8 +403,12 @@ class Bot:
         pyautogui.moveTo(815,96)
         pyautogui.leftClick()
         pyautogui.moveTo(*START_POSITION)
-        if not self.check(image="img/item/gesamtinfo.png",delay=0.3):
-            raise Exception("could not find img/exemplar_anzahlEx1.png in exemplar_screen") #TODO: replace with location detection
+        if self.check_ocr(region=(1400,230,130,40), save_path="img/item/confirm_thiscount.png",text="Anzahl Ex. 1",n_tries=10,delay=0.3)==False: #("img/item/thiscount.png",n_tries=10,delay=0.3) == False:
+            print("not at location, trying an additional time")
+            if self.check_ocr(region=(886,150,155,50),save_path="img/error_img.png",text="Trefferliste"):
+                dn.send_notification(f"Got lost in 'Trefferliste', moved to title annd commited, please check {signatur}","PC1","warning")
+                pyautogui.leftClick(*GESAMTINFO_POSITION)
+            
         self.logging.bot_info("alt+r finished")
         time.sleep(0.1)
         if self.commit() ==False:
@@ -430,14 +422,15 @@ class Bot:
         self.logging.bot_info("Run started")
         self.ppn = ppn
         self.signatur = signatur
-        pyautogui.screenshot(region=(1218,785,60,30)).save("tmpimg.png")
-        while imagerecognition.ocr_core("tmpimg.png").split("\n")[0] != "PPN":
-            ##dn.send_notification("Could not find main screen","PC1","error")
+        # pyautogui.screenshot(region=(1218,785,60,30)).save("tmpimg.png")
+        #while imagerecognition.ocr_core("tmpimg.png").split("\n")[0] != "PPN":
+        while self.check_ocr(region=(1218,785,60,30),text="PPN",delay=0.2)==False:
+            #dn.send_notification("Could not find main screen","PC1","error")
             print("could not find main screen, restarting")
             pyautogui.hotkey("altleft","s")
             sleep_time = random.randint(1,5)
             time.sleep(DELAY*sleep_time)
-            pyautogui.screenshot(region=(1218,785,60,30)).save("tmpimg.png")
+            #pyautogui.screenshot(region=(1218,785,60,30)).save("tmpimg.png")
         # self.mti_rel(image="img/main_menu/ppn.png",rel_coords=(200,10)) #using image to find the location
         pyautogui.moveTo(1400,800)
         if self.main_screen(ppn_number=ppn)==True:
@@ -457,7 +450,7 @@ class Bot:
         self.signatur = signatur
         pyautogui.screenshot(region=(1218,785,60,30)).save("tmpimg.png")
         while imagerecognition.ocr_core("tmpimg.png").split("\n")[0] != "PPN":
-            #dn.send_notification("Could not find main screen","PC1","error")
+            dn.send_notification("Could not find main screen","PC1","error")
             print("could not find main screen, restarting")
             pyautogui.hotkey("altleft","s")
             sleep_time = random.randint(1,5)
@@ -477,8 +470,8 @@ class Bot:
             return False
         
 class ControlBot(Bot):
-    def __init__(self):
-        super().__init__()
+    def __init__(self,debug=False):
+        super().__init__(debug= debug)
         
     def check_item_screen(self):
         pyautogui.click(*EXEMPLAR_POSITION)
@@ -510,15 +503,25 @@ class ControlBot(Bot):
 
         #pyautogui.screenshot()
 
+    def check_exemplar_count(self,ppn):
+        self.main_screen(ppn_number=ppn)
+        self.ex
+    
+    
 if __name__ == '__main__':
    
     bot=Bot()
     
+    #bot.startup()
     
-    for i in range(25):
-        print(i)
-        if bot.run(ppn="658422049",signatur="ZC 50000 L433")==False: #!fix this title3
-            print(f"failed on run {i}")
+    #bot.run(ppn="86011225X",signatur="ZA 55300 N397")
+    # bot.item_screen("ZA 55300 N397")
+    #bot.locate_and_click_checkbox(region=(0,0,1920,1080))
+    bot.run(ppn="025240935",signatur="ZC 28000 K92")
+    # for i in range(25):
+    #     print(i)
+    #     if bot.run(ppn="025240935",signatur="ZC 28000 K92")==False:
+    #         print(f"failed on run {i}")
     #bot.exemplar_screen("ZC 50000 L433")
     #bot.edit_gesamtinfo("ZC 50000 L433")
     # bot.locate_and_click_checkbox()
@@ -526,7 +529,7 @@ if __name__ == '__main__':
     # for i in range(200):
     #     if bot.run(ppn="1685293034",signatur="UB 4053 S594") == False:
     #         break
-    #     #dn.send_notification(f"finished {i+1}/200","PC1","info")
+    #     dn.send_notification(f"finished {i+1}/200","PC1","info")
     # cb = ControlBot()
     # cb.run(ppn="840060254",signatur="ZC 50000 F399")
     
