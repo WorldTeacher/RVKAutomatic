@@ -1,3 +1,4 @@
+import os
 import random
 import time
 import pyautogui
@@ -124,7 +125,7 @@ class Bot:
                 time.sleep(delay)
         return False
 
-    def check_ocr(self, region:tuple, text:str, save_path:str="img/defaults.png", n_tries:int=10, delay:float=DELAY, start_delay:float=0.2):
+    def check_ocr(self, region:tuple, text:str, delete_image:bool=False,save_path:str="img/defaults.png", n_tries:int=10, delay:float=DELAY, start_delay:float=0.2):
         """
         checks if the screen contains the text, retries n times with delay in seconds
         
@@ -143,13 +144,15 @@ class Bot:
             time.sleep(start_delay)
         while tries < n_tries:
             pyautogui.screenshot(region=region).save(save_path)
-            if imagerecognition.ocr_core(save_path).split("\n")[0] == text or text in imagerecognition.ocr_core(save_path):
+            if imagerecognition.ocrtxt(save_path).split("\n")[0] == text or text in imagerecognition.ocr_core(save_path):
                 self.logging.bot_info(f"found {text}")
                 return True
             else:
                 tries += 1
                 self.logging.bot_info(f"could not find {text}, retrying ({tries}/{n_tries})")
                 time.sleep(delay)
+        if delete_image == True:
+            os.remove(save_path)
         return False
 
     def check_screen(self, image:str)->bool:
@@ -171,6 +174,12 @@ class Bot:
             self.logging.bot_critical("Screen does not match, aborting")
             return False
 
+    def check_signatur(self, region:tuple, signatur:str)->bool:
+        image=pyautogui.screenshot(region=region)
+        result=imagerecognition.check_signatur(image,signatur)
+        return result
+        
+        
     def check_count(self):
         
         pyautogui.screenshot(region=(1450,240,120,30)).save("img/item/thiscount.png")
@@ -324,7 +333,7 @@ class Bot:
         if not window_name in pyautogui.getActiveWindow().title:
             self.logging.bot_info("waiting for window, checking if it exists")
             move.change_window("PHFR: Katalog")
-            pyautogui.click(10,1) #set focus manually, in some cases the window is not focused
+            pyautogui.click(120,15) #set focus manually, in some cases the window is not focused
             
         elif window_name in pyautogui.getActiveWindow().title:
             self.logging.bot_info("window found, checking if screen matches")
@@ -337,7 +346,7 @@ class Bot:
         pyautogui.leftClick()
         self.write_string(str(ppn_number), confirm=True) 
         #self.check(image="img/count_base.png",n_tries=10,delay=0.3)
-        if self.check_ocr(region=(1400,230,450,40),save_path="img/item/THIScount.png",text="Anzahl Ex. 1",n_tries=10,delay=0.3)==False:
+        if self.check_ocr(region=(485,240,1235,30),save_path="img/item/thiscount.png",text="Anzahl Ex. 1",n_tries=10,delay=0.3)==False:
             dn.send_notification(f"Got a count mismatch, expected {self.count} got {self.this_count}","PC1","warning")
             pyautogui.hotkey('alt', 's')
             return False
@@ -349,9 +358,12 @@ class Bot:
             raise Exception("could not find gesamtinfoheading")
         self.edit_gesamtinfo(signatur)
         # if self.check("img/item/gesamtinfoheading.png",n_tries=20,delay=0.2) == False:
-
-        if self.check_ocr(region=(900,150,130,40),text="Gesamtinfo",save_path="img/item/gesamtinfo.png")==False: #("img/item/gesamtinfoheading.png",n_tries=10,delay=0.3) == False:
-            raise Exception("could not find gesamtinfoheading")
+        #TODO check if this is still needed, only applicable in some cases
+        while self.check_ocr(region=(900,150,130,40),text="Gesamtinfo",save_path="img/item/gesamtinfo.png",n_tries=20,delay=0.2)==False:
+            print("not at location, trying an additional time")
+            time.sleep(0.2)
+        # if self.check_ocr(region=(900,150,130,40),text="Gesamtinfo",save_path="img/item/gesamtinfo.png",n_tries=20)==False: #("img/item/gesamtinfoheading.png",n_tries=10,delay=0.3) == False:
+        #     raise Exception("could not find gesamtinfoheading")
         #self.mti_rel(image="img/item/gesamtinfoheading.png",rel_coords=(0,100))
         self.scroll(n=2000, direction="down")
         #! detect if scroll was executed
@@ -393,12 +405,17 @@ class Bot:
         if not self.check_ocr(region=(0,130,245,40),text="Bearbeiten Exemplar",delay=0.2):
             Exception("could not find img/title/exemplar_stuff.png in exemplar_screen")
             #return to try again
-        pyautogui.leftClick()
-        pyautogui.hotkey("ctrl","a")
-        pyautogui.press("backspace")
-        pyautogui.write(signatur)
+        if self.check_signatur(region=(1080,240,740,25),signatur=signatur)==True:
+        #if self.check_ocr(region=(1080,240,740,25),text=signatur,delay=0.2)==True:
+            print("signatur in main field yet, not setting it in add. field")
+        else:
+            pyautogui.leftClick()
+            pyautogui.hotkey("ctrl","a")
+            pyautogui.press("backspace")
+            pyautogui.write(signatur)
         pyautogui.hotkey("altleft","p")
         self.logging.bot_info("pressed alt+p")
+        
         time.sleep(DELAY*3)
         pyautogui.moveTo(815,96)
         pyautogui.leftClick()
@@ -511,13 +528,14 @@ class ControlBot(Bot):
 if __name__ == '__main__':
    
     bot=Bot()
-    
+    bot.run(ppn="1601906307",signatur="WK 7500 C428")
+    #bot.exemplar_screen("ZC 53000 O33")
     #bot.startup()
-    
+    # reuslt = bot.check_ocr(region=(485,240,1235,30),save_path="img/item/thiscount_test.png",text="Anzahl Ex. 1",n_tries=10,delay=0.3)
+    # print(reuslt)
     #bot.run(ppn="86011225X",signatur="ZA 55300 N397")
     # bot.item_screen("ZA 55300 N397")
     #bot.locate_and_click_checkbox(region=(0,0,1920,1080))
-    bot.run(ppn="025240935",signatur="ZC 28000 K92")
     # for i in range(25):
     #     print(i)
     #     if bot.run(ppn="025240935",signatur="ZC 28000 K92")==False:
