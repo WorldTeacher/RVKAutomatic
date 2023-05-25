@@ -1,17 +1,26 @@
 import logging
-import os
+import datetime
 
-class log:
-    def __init__(self) -> None:
-        logging.basicConfig(filename='data/logs/program.log',level=logging.DEBUG,format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-        self.bot_log = logging.getLogger('bot')
-    def bot_info(self, message):
-        self.bot_log.info(message)
-    def bot_debug(self, message):
-        self.bot_log.debug(message)
-    def bot_error(self, message):
-        self.bot_log.error(message)
-    def bot_warning(self, message):
-        self.bot_log.warning(message)
-    def bot_critical(self, message):
-        self.bot_log.critical(message)
+class Log:
+    def __init__(self, filename, level=logging.DEBUG):
+        self.logger = logging.getLogger(filename)
+        self.logger.setLevel(level)
+        formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s', datefmt='%Y-%m-%d %H:%M')
+        file_handler = logging.FileHandler(filename)
+        file_handler.setFormatter(formatter)
+        self.logger.addHandler(file_handler)
+
+    def info(self, message):
+        self.logger.info(message)
+
+    def debug(self, message):
+        self.logger.debug(message)
+
+    def error(self, message):
+        self.logger.error(message)
+
+    def warning(self, message):
+        self.logger.warning(message)
+
+    def critical(self, message):
+        self.logger.critical(message)
