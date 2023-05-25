@@ -1,13 +1,14 @@
+import sys
 from bot import Bot, ControlBot#,TestBot
 import json
 import time
 from discord_notification import *
-from preprocess import Preprocess
-import os,sys
-from datetime import date
+import os
+from logger import Log
+input_folder = "C:/rvkinput"
+output_folder = "C:/rvkoutput"
 
-
-
+log=Log("data/logs/main.log")
 class Main:
     def __init__(self, debug:bool=False) -> None:
         if not debug:
@@ -16,28 +17,44 @@ class Main:
         self.donedata={}
         pass
     
+    def resume_file_present(self, input_folder, cur_file_name):
+        prefix = "resume_"
+        if os.path.exists(f"{input_folder}/{prefix}{cur_file_name}"):
+            return True
+        else:
+            return False
     
-    def main_startup(self):
-        input_folder = "C:/rvkinput"
-        output_folder = "C:/rvkoutput"
+    def create_resume_file(self, data, subject_name):
+        prefix = "resume_"
+        if not os.path.exists(f"{input_folder}/{prefix}{subject_name}.json"):
+            with open(f"{input_folder}/{prefix}{subject_name}.json","w",encoding="utf-8") as f:
+                json.dump(data,f,indent=4)
+        log.info(f"Created resume file for {subject_name}")
+    
+    def main_startup(self, resume:bool=False):
         files_in_input = os.listdir(input_folder)
-        try:
-            today_runs = len(os.listdir(f'{output_folder}/{date.today()}'))
-        except FileNotFoundError:
-            os.makedirs(f'{output_folder}/{date.today()}',exist_ok=False)
-            today_runs = len(os.listdir(f'{output_folder}/{date.today()}'))
+        resume_data={}
+        res_file_present = False
+        if resume==True:
+            if self.resume_file_present(input_folder, files_in_input[0]):
+                print("Resume file found\n reading content")
+                with open(f"{input_folder}/resume_{files_in_input[0]}","r",encoding="utf-8") as f:
+                    resume_data = json.load(f)
+                skip_entries = len(resume_data)
+                # with open(f"{input_folder}/resume_{files_in_input[0]}","w",encoding="utf-8") as f:
+                #     json.dump({},f,indent=4)
+                res_file_present = True
+                return files_in_input[0], skip_entries, res_file_present
+            else:
+                print("No resume file found")
+                print("Creating resume file")
+                self.create_resume_file(data={}, subject_name=files_in_input[0].replace(".json",""))
             
-        print(files_in_input)
-        if len(files_in_input)>1: #work on issue#2
-            if "resume.json" in files_in_input:
-                pass
-        print(f"starting work on {files_in_input[0]}")
-        curr_date=date.today()
-        print(curr_date)
-        if not os.path.exists(f'{output_folder}/{curr_date}/run_{today_runs+1}'):
-            os.makedirs(f'{output_folder}/{curr_date}/run_{today_runs+1}',exist_ok=False)
-        output_folder=f'{output_folder}/{curr_date}/run_{today_runs+1}'
-        return input_folder, output_folder, files_in_input[0]   
+            
+            
+            return files_in_input[0], skip_entries if len(resume_data)>0 else -1, res_file_present
+        else:
+            return files_in_input[0], -1, res_file_present
     
     def read_write_json(self, folder, input_file, payload:dict):
         with open(f'{folder}/{input_file}',"r",encoding="utf-8") as f:
@@ -46,7 +63,8 @@ class Main:
         file_data[curr_entry]=payload
         with open(f'{folder}/{input_file}',"w",encoding="utf-8") as f:
             json.dump(file_data,f,indent=4)
-    
+        log.info(f"Written to {folder}/{input_file}")
+        
     def testrun(self, resume:bool=False):
         input_folder, output_folder, file = self.main_startup()
         error_file = file.replace(".json","_error.json")
@@ -79,15 +97,12 @@ class Main:
         """
         The main function of the program. It will run the bot on all entries in the input file.
         
-        
-        
         Args:
             - resume (bool, optional): Changes the run to detect older runs and remove the entries from the list, to remove duplicate work. Defaults to False.
         """
-        input_folder, output_folder, file = self.main_startup()
+        file, skip_titles ,resume_file_present= self.main_startup(resume=resume)
         error_file = file.replace(".json","_error.json")
         done_file = file.replace(".json","_done.json")
-        failed_file = file.replace(".json","_failed.json")
         #check if error file exists
         if not os.path.exists(f'{output_folder}/{error_file}'):
             with open(f'{output_folder}/{error_file}',"w",encoding="utf-8") as f:
@@ -95,12 +110,15 @@ class Main:
         if not os.path.exists(f'{output_folder}/{done_file}'):
             with open(f'{output_folder}/{done_file}',"w",encoding="utf-8") as f:
                 json.dump({},f,indent=4)
+        log.info(f"created files {error_file} and {done_file}")
         
         i=1
         with open(f'{input_folder}/{file}',"r",encoding="utf-8") as f:
             data=json.load(f)
+            print(len(data))
         if resume==True:
-            data=self.resume_run(data, output_folder)
+            if resume_file_present==True:
+                data=self.resume_run(data=data, skip_files=skip_titles)
         for entry in data:
             ppn=data[entry]["PPN"]
             sig=data[entry]["SIG"]
@@ -108,19 +126,24 @@ class Main:
             edition=data[entry]["EDI"]
             if sig == " ":
                 self.read_write_json(folder=output_folder, input_file=error_file, payload={"PPN":ppn,"SIG":sig,"NOT":notice,"EDI":edition,"ERR":"No signature"})
+                print(f"Skipped entry {entry} due to error: No signature")
+                self.read_write_json(folder=input_folder, input_file=f"resume_{file}", payload={"PPN":ppn,"SIG":sig,"NOT":notice,"EDI":edition})
+                log.info(f'Skipped entry {entry} due to error: No signature')
                 continue
             if not notice == "":
                 self.read_write_json(folder=output_folder, input_file=error_file, payload={"PPN":ppn,"SIG":sig,"NOT":notice,"EDI":edition,"ERR":"Notice not empty"})
                 continue
             if self.testbot.run(ppn=ppn, signatur=sig)==False:
                 send_notification(message=f"Skipped entry {entry} due to error",computer="test",type="error")
-                self.read_write_json(folder=output_folder, input_file=error_file, payload={"PPN":ppn,"SIG":sig,"NOT":notice,"EDI":edition})
+                self.read_write_json(folder=output_folder, input_file=error_file, payload={"PPN":ppn,"SIG":sig,"NOT":notice,"EDI":edition,"ERR:":"Error in testbot"})
             else:
                 send_notification(message=f"Completed entry {i}/{len(data)}",computer="test",type="info")
                 self.read_write_json(folder=output_folder, input_file=done_file, payload={"PPN":ppn,"SIG":sig,"NOT":notice,"EDI":edition})
+                #write completed entry to resume file
+                self.read_write_json(folder=input_folder, input_file=f"resume_{file}", payload={"PPN":ppn,"SIG":sig,"NOT":notice,"EDI":edition})
             time.sleep(1)
-            i+=1
             print(f"Completed entry {i}/{len(data)}")
+            i+=1
         
     def control(self):
         controlbot = ControlBot()
@@ -150,40 +173,41 @@ class Main:
                 with open("data/results/errors.json","r") as f:
                     json.dump(error_done,f,indent=4)   
 
-
-    def resume_run(self,data,output_folder):
+    def resume_run(self,data,skip_files:int):
         full_data=data
-        print(output_folder)
+        #iterate over full data and remove entries that are already done
+        entries_to_complete={}
+        for id, content in enumerate(full_data):
+            if id>=skip_files:
+                entries_to_complete[content]=full_data[content]
+        
+        # with open(f'{input_folder}/resume_.json',"w",encoding="utf-8") as f:
+        #     json.dump(entries_to_complete,f,indent=4)
+        print(len(entries_to_complete))
+        log.info(f"Resuming run with {len(entries_to_complete)} entries")
         #get data of run that was interrupted
-        interruptedRun= output_folder.split("/")[-1].split("_")[1]
-        interruptedRun=int(interruptedRun)-1
-        #get files in output folder
-        files=os.listdir(f'C:/rvkoutput/{date.today()}/run_{interruptedRun}')
-        print(files[0])
-        with open(f'C:/rvkoutput/{date.today()}/run_{interruptedRun}/{files[0]}',"r",encoding="utf-8") as f:
-            completed_data=json.load(f)
-        #count, how many entries were completed
-        completed_entries=len(completed_data)
-        #take the full_data and remove the completed entries
-        entries_to_complete = {k: full_data[k] for k in list(full_data)[completed_entries:]}
-        #write the entries_to _complete to a new file in the output folder
-        with open(f"{output_folder}/run_{interruptedRun}_resume.json","w",encoding="utf-8") as f:
-            json.dump(entries_to_complete,f,indent=4)
+        
             
         return entries_to_complete
         # data
-        
+    
+    def exit_handler(self):
+        message="@everyone\n\n Der Bot wurde beendet, entweder durch einen Fehler, oder der Durchlauf wurde beendet. Bitte prüfen und ggf. neu starten. "
+        send_restart(message=message) 
                     
          
             
 if __name__ == "__main__":
     # autojson,manualjson = Preprocess(file="data/source/chemie_final.json", output_file="data/results/chemie_run.json", file_encoding="utf-8").main()
     # print(autojson,manualjson)
-    # main=Main().run(autojson=autojson,manualjson=manualjson)       
-    main=Main(debug=False).main(resume=False)
-    
-
-    
+    # main=Main().run(autojson=autojson,manualjson=manualjson)   
+    main=Main(debug=False)#.main(resume=True)
+    try:    
+        main.main(resume=True)
+    except:
+        main.exit_handler()
+    finally:
+        sys.exit()
     # main=Main().main()
     
     #testing=Main(debug=True).main()
