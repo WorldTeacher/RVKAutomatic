@@ -5,6 +5,7 @@ import time
 from discord_notification import *
 import os
 from logger import Log
+from preprocess import Create_Json, PDF_Create
 input_folder = "C:/rvkinput"
 output_folder = "C:/rvkoutput"
 
@@ -207,6 +208,8 @@ if __name__ == "__main__":
     except:
         main.exit_handler()
     finally:
+        from post import post
+        post()
         sys.exit()
     # main=Main().main()
     

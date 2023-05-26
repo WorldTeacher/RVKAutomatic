@@ -14,20 +14,17 @@ IF %ERRORLEVEL% NEQ 0 (
     ECHO Press any key to continue...
     
 )
-pip install -r requirements.txt
+@REM pip install -r requirements.txt
 ECHO Python und Abhängigkeiten sind installiert, weiter...
 ECHO Test, ob Teseract installiert ist...
 @REM test if C:\rvkinput and C:\rvkoutput exist
 if exist C:\tesseract (
     ECHO Tesseract ist installiert, weiter...
 ) else (
-    ECHO Tesseract ist nicht installiert, bitte installieren
+    ECHO Tesseract ist nicht installiert, wird installiert
     REM Copy a folder from a shared network drive to the local machine
     xcopy "Y:\Gruppen\Bibliothek-Allgemeines\Ausbildungsordner\Alexander Kirchner\bib_data\tesseract" "C:\tesseract" /E /I /H /Y
     REM Set the environment variable
-    set tess_installed=true
-    ECHO Press any key to continue...
-    PAUSE
 )
 ECHO Test, ob C:\rvkinput und C:\rvkoutput existieren...
 @REM test if C:\rvkinput and C:\rvkoutput exist
@@ -39,6 +36,7 @@ if exist C:\rvkinput (
     ECHO Press any key to continue...
     PAUSE
 )	
+mkdir C:\rvkbackup
 if exist C:\rvkoutput (
     ECHO C:\rvkoutput existiert, weiter...
 ) else (
@@ -49,6 +47,7 @@ if exist C:\rvkoutput (
 )
 @REM create a shortcut to the folder c:\rvkinput
 @REM check if the shortcut already exists
+@echo off
 if exist C:\rvkinput.lnk (
     ECHO C:\rvkinput.lnk existiert, weiter...
 ) else (
@@ -56,14 +55,35 @@ if exist C:\rvkinput.lnk (
     @REM get the username
     username=$(whoami)
     @REM create the shortcut
-
+    @echo off
     powershell -Command "$WshShell = New-Object -ComObject WScript.Shell; $Shortcut = $WshShell.CreateShortcut('C:\Users\%username%\Desktop\rvkinput.lnk'); $Shortcut.TargetPath = 'C:\rvkinput'; $Shortcut.Save()"
+)
+Echo wird ein neues Fach geladen, oder ein altes bearbeitet? 
+set /p fach=(n(eu) / a(lt))
+@REM echo %fach%
+if %fach%==n (
+    ECHO Neues Fach wird geladen... bitte die aus Oberfell gespeicherte TXT Datei in den rvkinput Ordner kopieren und alle alten Dateien löschen
+    PAUSE
+    @REM copy the created txt file to the rvkinput folder
+    @REM check folder content
+    if exist C:\rvkinput\*.txt (
+        ECHO TXT Datei gefunden, weiter...
+    ) else (
+        ECHO TXT Datei nicht gefunden, bitte in den rvkinput Ordner kopieren
+        ECHO Press any key to continue...
+        PAUSE
+    )
+    python pre.py
     ECHO Press any key to continue...
     PAUSE
+) else (
+    ECHO Altes Fach wird bearbeitet...
 )
 ECHO Befor der Bot gestartet wird, bitte aDIS starten und in das Katalogmodul wechseln
 @REM REM ECHO Press any key to continue...
 PAUSE
 ECHO Starte den Bot...
-@REM python main.py
+python main.py
+ECHO Bot beendet, bitte rvkoutput Ordner prüfen
+
 EXIT

@@ -3,7 +3,7 @@ import pytesseract,cv2
 
 
 
-pytesseract.pytesseract.tesseract_cmd = r'C:\Users\aky547\Desktop\tesseract\tesseract.exe'
+pytesseract.pytesseract.tesseract_cmd = r'C:\tesseract\tesseract.exe'
 FIELDS_TO_DELETE=[
     "Allg",
     "Arch",
@@ -15,7 +15,7 @@ FIELDS_TO_DELETE=[
     "EDV",
     "Fre",
     "Geo",
-    "His",
+    "Hist",
     "HTW",
     "JuLi",
     "Komm",
@@ -38,6 +38,7 @@ FIELDS_TO_DELETE=[
     "Wir",
     "Oeko"
 ]
+
 def ocr_core(filename):
     """
     This function will handle the core OCR processing of images.
@@ -68,6 +69,7 @@ def ocrtxt(filename):
     # Then rectangular part is cropped and passed on
     # to pytesseract for extracting text from it
     # Extracted text is then written into the text file
+    text=""
     for cnt in contours:
         x, y, w, h = cv2.boundingRect(cnt)
         
@@ -92,9 +94,18 @@ def digits(filename):
     digit=re.findall(r'\d+', text)
     return digit
 
+def check_signatur(image:str,signatur:str):
+    text = pytesseract.image_to_string(image)
+    import jellyfish
+    if jellyfish.jaro_distance(text, signatur) > 0.9:
+        return True
+    else:
+        return False
 if __name__ == '__main__':
-    digit = ocr_core("C:/Users/aky547/Desktop/img/item/gesamtinfoheading.png")
-    print(digit)
+    # digit = ocr_core("tmpimg.png")
+    # digit=digit.split("\n")[0]
+    # print(f'recognized: "{digit}"')
     # if lesson in txt:
     #     if lesson in FIELDS_TO_DELETE:
     #         print("found")
+    print(check_signatur("img/defaults.png","ZC 53000 O33"))
