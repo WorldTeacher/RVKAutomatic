@@ -1,5 +1,6 @@
 import pyautogui
 import win32gui
+import win32con
 import regex as re
 #pyautogui.moveTo(1920,1080, duration=0.25)
 
@@ -27,11 +28,15 @@ class WindowMgr:
         """find a window whose title matches the wildcard regex"""
         self._handle = None
         win32gui.EnumWindows(self._window_enum_callback, wildcard)
-
+        return self
     def set_foreground(self):
         """put the window in the foreground"""
         win32gui.SetForegroundWindow(self._handle)
-
+        return self
+    
+    def maximize(self):
+        win32gui.ShowWindow(self._handle, win32con.SW_MAXIMIZE)
+        return self
 
 def change_window(window_name):
     try:
@@ -64,5 +69,5 @@ def change_focus(window):
 if __name__ == '__main__':
     w = WindowMgr()
     w.find_window_wildcard(".*PHFR:.*")
-    w.set_foreground()
+    w.set_foreground().maximize()
     # change_window("PHFR: Katalog")
