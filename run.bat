@@ -1,4 +1,4 @@
-REM Check if Python is installed
+@REM REM Check if Python is installed
 
 python -c "import sys" 2> NUL
 IF %ERRORLEVEL% NEQ 0 (
@@ -29,17 +29,19 @@ if exist C:\rvkinput (
 ) else (
     ECHO C:\rvkinput existiert nicht, wird erstellt
     mkdir C:\rvkinput
-    ECHO Press any key to continue...
-    PAUSE
 )	
-mkdir C:\rvkbackup
+if exist C:\rvkbackup (
+    ECHO C:\rvkbackup existiert, weiter...
+) else (
+    ECHO C:\rvkbackup existiert nicht, wird erstellt
+    mkdir C:\rvkbackup
+)	
+
 if exist C:\rvkoutput (
     ECHO C:\rvkoutput existiert, weiter...
 ) else (
     ECHO C:\rvkoutput existiert nicht, wird erstellt
     mkdir C:\rvkoutput
-    ECHO Press any key to continue...
-    PAUSE
 )
 @REM create a shortcut to the folder c:\rvkinput
 @REM check if the shortcut already exists

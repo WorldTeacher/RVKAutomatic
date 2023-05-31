@@ -16,13 +16,19 @@ class Main:
             self.testbot = Bot()
         self.manualdata={}
         self.donedata={}
+        self.progess=0
+        self.to_do=0
         pass
     
     def resume_file_present(self, input_folder, cur_file_name):
         prefix = "resume_"
-        if os.path.exists(f"{input_folder}/{prefix}{cur_file_name}"):
-            return True
+        if type(cur_file_name)==list:
+            for file in cur_file_name:
+                if os.path.exists(f"{input_folder}/{prefix}{file}"):
+                    return True
         else:
+            if os.path.exists(f"{input_folder}/{prefix}{cur_file_name}"):
+                return True
             return False
     
     def create_resume_file(self, data, subject_name):
@@ -32,30 +38,33 @@ class Main:
                 json.dump(data,f,indent=4)
         log.info(f"Created resume file for {subject_name}")
     
-    def main_startup(self, resume:bool=False):
+    def main_startup(self, resume:bool=False)->tuple[str,int,bool]:
+
         files_in_input = os.listdir(input_folder)
         resume_data={}
         res_file_present = False
         if resume==True:
-            if self.resume_file_present(input_folder, files_in_input[0]):
+            if self.resume_file_present(input_folder, files_in_input):
                 print("Resume file found\n reading content")
-                with open(f"{input_folder}/resume_{files_in_input[0]}","r",encoding="utf-8") as f:
+                #pick the file with the "resume_" prefix
+                open_file = [file for file in files_in_input if file.startswith("resume_")]
+                with open(f"{input_folder}/{open_file[0]}","r",encoding="utf-8") as f:
                     resume_data = json.load(f)
                 skip_entries = len(resume_data)
+                
                 # with open(f"{input_folder}/resume_{files_in_input[0]}","w",encoding="utf-8") as f:
                 #     json.dump({},f,indent=4)
                 res_file_present = True
-                return files_in_input[0], skip_entries, res_file_present
             else:
                 print("No resume file found")
-                print("Creating resume file")
-                self.create_resume_file(data={}, subject_name=files_in_input[0].replace(".json",""))
-            
-            
-            
-            return files_in_input[0], skip_entries if len(resume_data)>0 else -1, res_file_present
+                self.create_resume_file({},files_in_input[0])
+
         else:
-            return files_in_input[0], -1, res_file_present
+            return files_in_input[0], 0, False
+        if res_file_present:
+            
+            return open_file[0].replace("resume_",""), skip_entries, res_file_present
+            
     
     def read_write_json(self, folder, input_file, payload:dict):
         with open(f'{folder}/{input_file}',"r",encoding="utf-8") as f:
@@ -120,6 +129,7 @@ class Main:
         if resume==True:
             if resume_file_present==True:
                 data=self.resume_run(data=data, skip_files=skip_titles)
+        self.to_do=len(data)
         for entry in data:
             ppn=data[entry]["PPN"]
             sig=data[entry]["SIG"]
@@ -144,6 +154,7 @@ class Main:
                 self.read_write_json(folder=input_folder, input_file=f"resume_{file}", payload={"PPN":ppn,"SIG":sig,"NOT":notice,"EDI":edition})
             time.sleep(1)
             print(f"Completed entry {i}/{len(data)}")
+            self.progess=i
             i+=1
         
     def control(self):
@@ -208,8 +219,11 @@ if __name__ == "__main__":
     except:
         main.exit_handler()
     finally:
-        from post import post
-        post()
+        print("Done")
+        print(main.progess,main.to_do)
+        if main.progess==main.to_do:
+            from post import post
+            post(dupes=True)
         sys.exit()
     # main=Main().main()
     

@@ -99,6 +99,24 @@ class Preprocess():
         
         return self.output_file, self.output_file.replace(".json","_manual.json")            
 
+
+def remove_duplicates(file):
+    with open(file, 'r') as f:
+        data = json.load(f)
+
+    cleaned_data = {}
+    ppn_set = set()
+
+    for key, value in data.items():
+        ppn = value['PPN']
+        if ppn not in ppn_set:
+            cleaned_data[key] = value
+            ppn_set.add(ppn)
+
+    with open(f'{file}', 'w') as f:
+        json.dump(cleaned_data, f, indent=4)
+
+    
 class PDF_Create:
     def __init__(self) -> None:
         self.path=r"C:\rvkoutput"
@@ -107,7 +125,12 @@ class PDF_Create:
     
         pass
     
-    def create_pdf(self):
+    def create_pdf(self,remove_dupes=False):
+        if remove_dupes==True:
+            json_files=os.listdir(self.path)
+            for file in json_files:
+                if file.endswith(".json"):
+                    remove_duplicates(f'{self.path}/{file}')
         cmd=r'processing\jdk17.0.3_6\bin\java.exe --module-path "processing/javafx-sdk-18.0.1/lib" --add-modules javafx.controls,javafx.fxml -jar processing/rvkJsonToPdf.jar'
         cmd_pt2=f'{self.path}'
         cmd=f'{cmd} {cmd_pt2}'
@@ -127,4 +150,4 @@ if __name__ == "__main__":
     #preprocess = Preprocess(file="", output_file="data/source/chemie_merged.json", file_encoding="utf-8").main()
     
     # create=Create_Json(r"C:\rvkinput").create_json().delete_txt_file()
-    pdf=PDF_Create().create_pdf().move_json_file()
+    pdf=PDF_Create().create_pdf(remove_dupes=True).move_json_file()

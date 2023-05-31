@@ -27,6 +27,7 @@ class WindowMgr:
     def find_window_wildcard(self, wildcard):
         """find a window whose title matches the wildcard regex"""
         self._handle = None
+        wildcard = ".*{}.*".format(wildcard)
         win32gui.EnumWindows(self._window_enum_callback, wildcard)
         return self
     def set_foreground(self):
@@ -68,6 +69,6 @@ def change_focus(window):
     
 if __name__ == '__main__':
     w = WindowMgr()
-    w.find_window_wildcard(".*PHFR:.*")
+    w.find_window_wildcard("PHFR:")
     w.set_foreground().maximize()
     # change_window("PHFR: Katalog")

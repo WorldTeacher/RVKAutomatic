@@ -9,9 +9,9 @@ import imagerecognition
 
 START_POSITION = (1,1)
 EXEMPLAR_POSITION = (498,980)
-GESAMTINFO_POSITION = (420,90)
+GESAMTINFO_POSITION = (460,90)
 FAILSAFE_LOCATION = (0,0)
-EDIT_POSITION = (525,90)
+EDIT_POSITION = (560,90)
 DELAY = 0.5
 
 class Bot:
@@ -24,9 +24,7 @@ class Bot:
         self.logging = Log("data/logs/bot.log")
         self.logging.info("Bot started")   
         self.first_run = True 
-        if debug == False:
-            if self.first_run ==True:
-                self.startup()    
+            
         self.signatur = ""
         self.ppn = ""
         self.oldnotation:list = []
@@ -338,11 +336,11 @@ class Bot:
             return False
             
     def startup(self): #* done
-        window_name = "PHFR: Katalog"
+        window_name = "PHFR:"
         if not window_name in pyautogui.getActiveWindow().title:
             self.logging.info("waiting for window, checking if it exists")
-            move.change_window("PHFR: Katalog")
-            pyautogui.click(120,15) #set focus manually, in some cases the window is not focused
+            move.WindowMgr().find_window_wildcard(window_name).set_foreground().maximize()
+            #pyautogui.click(120,15) #set focus manually, in some cases the window is not focused
             self.logging.info("window found, checking if screen matches")
         elif window_name in pyautogui.getActiveWindow().title:
             self.logging.info("window found, checking if screen matches")
@@ -355,7 +353,7 @@ class Bot:
         pyautogui.leftClick()
         self.write_string(str(ppn_number), confirm=True) 
         #self.check(image="img/count_base.png",n_tries=10,delay=0.3)
-        if self.check_ocr(region=(485,240,1235,30),save_path="img/item/thiscount.png",text="Anzahl Ex. 1",n_tries=10,delay=0.3)==False:
+        if self.check_ocr(region=(480,230,1235,30),save_path="img/item/thiscount.png",text="Anzahl Ex. 1",n_tries=10,delay=0.3)==False:
             dn.send_notification(f"Got a count mismatch, expected {self.count} got {self.this_count} for PPN: {ppn_number}","PC1","warning")
             self.logging.warning(f"Got a count mismatch, expected {self.count} got {self.this_count}")
             pyautogui.hotkey('alt', 's')
@@ -369,7 +367,9 @@ class Bot:
         if self.edit_gesamtinfo(signatur)==False:
             self.logging.info("could not edit gesamtinfo")
             return False
-        # if self.check("img/item/gesamtinfoheading.png",n_tries=20,delay=0.2) == False:
+        if self.check(image="img/item/sort_error.png",n_tries=3,delay=0.1):
+            self.logging.info("got a sort error")
+            pyautogui.click(1011,569)
         #TODO check if this is still needed, only applicable in some cases
         while self.check_ocr(region=(900,150,130,40),text="Gesamtinfo",save_path="img/item/gesamtinfo.png",n_tries=20,delay=0.2)==False:
             print("not at location, trying an additional time")
@@ -447,6 +447,9 @@ class Bot:
         time.sleep(DELAY)
     
     def run(self,signatur:str, ppn:str):
+        if self.first_run == True:
+            self.startup()
+            self.first_run = False
         time.sleep(DELAY*2)
         self.logging.info("Run started")
         self.ppn = ppn
